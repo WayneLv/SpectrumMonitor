@@ -1,0 +1,43 @@
+﻿<Window x:Class="SpectrumMonitor.Windows.SpectrumFreqSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpectrumMonitor.Windows"
+        xmlns:control="clr-namespace:SpectrumMonitor.Controls"
+
+        mc:Ignorable="d"
+        Title="Frequency Setting" Height="160" Width="200" Background="Black">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="75" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Rectangle Stroke="LightGray" Grid.RowSpan="3" Grid.ColumnSpan="3" Margin="3"/>
+        <Label Grid.Row="0" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Freq:</Label>
+        <control:NumericBox Grid.Row="0" Grid.Column="1" Margin="0,5,0,0" Unit="Hz"
+                            Text="{Binding Path= StartFrequency,Mode=TwoWay,Converter={StaticResource DoubleToFreqDisplay}}"></control:NumericBox>
+
+  
+
+        <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Right">Stop Freq:</Label>
+        <control:NumericBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Unit="Hz"
+                            Text="{Binding Path= StopFrequency,Mode=TwoWay,Converter={StaticResource DoubleToFreqDisplay}}"></control:NumericBox>
+        
+        <Label Grid.Row="2" Grid.Column="0" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Right">RBW:</Label>
+        <control:NumericBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,5" Unit="Hz"
+                            Text="{Binding Path= RBW,Mode=TwoWay,Converter={StaticResource DoubleToFreqDisplay}}"></control:NumericBox>
+
+
+        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Width="60" Click="Button_Click">OK</Button>
+    </Grid>
+</Window>

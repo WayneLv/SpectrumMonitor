@@ -1,0 +1,57 @@
+﻿<Window x:Class="SpectrumMonitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpectrumMonitor;assembly="
+        xmlns:control="clr-namespace:SpectrumMonitor.Controls;assembly="
+        xmlns:windows="clr-namespace:SpectrumMonitor.Windows"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Spectrum Monitor" MinHeight="740" MinWidth="1280" Background="DarkGray">
+    <Grid>
+        <!--<control:WindowButton Content="ShowDeviceInfo" UserWindowType ="{x:Type windows:DeviceInfo}" />
+        <control:DisplayWindowLable Content="Show Error Info" UserWindowType ="{x:Type windows:ErrorInfo}" />
+        <control:WindowButton Content="Search Device" UserWindowType ="{x:Type windows:SearchDevice}" />
+        <Grid Name="ViewPortContainer" Margin="5" Grid.Row="0" Grid.Column="1">
+            <Rectangle Stroke="Gold" />
+            <Image Name="ChartViewport"/>
+        </Grid>
+        <ContentControl x:Name="NewPanel" />-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition Width="800"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="1"/>
+            <ColumnDefinition Width="3"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="6"/>
+            <RowDefinition Height="300"/>
+            <RowDefinition Height="6"/>
+            <RowDefinition Height="300"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" FontSize="30" Foreground="Black" HorizontalAlignment="Center"></TextBlock>
+        <ContentControl x:Name="MenuArea" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6"/>
+        <ContentControl x:Name="FunctionArea" Grid.Row="2" Grid.Column="1"/>
+        <ContentControl x:Name="IndicatorArea" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1"/>
+        <ContentControl x:Name="SpectrogramArea" Grid.Row="4" Grid.Column="1"/>
+        <ContentControl x:Name="SignalTableArea" Grid.Row="4" Grid.RowSpan="3" Grid.Column="3" Grid.ColumnSpan="2"/>
+        <!--<ContentControl x:Name="SettingPanelArea" Grid.Row="4" Grid.RowSpan="3" Grid.Column="6"/>-->
+        <ContentControl x:Name="SpectrumArea" Grid.Row="6" Grid.Column="1"/>
+        <control:DisplayWindowLable Content="{Binding Path= LatestMessage, Mode=OneWay}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="4" x:Name="ErrorMessage" HorizontalAlignment="Stretch"
+                                    UserWindowType ="{x:Type windows:ErrorInfo}" />
+        <TextBlock Grid.Row="2" Grid.Column="4" x:Name="VersionString" VerticalAlignment="Center" HorizontalAlignment="Right">V.0.0</TextBlock>
+
+
+    </Grid>
+</Window>

@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="SpectrumMonitor.Controls.SpectrumMarkerIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpectrumMonitor.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="60" Background="Transparent">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="MarkerIcon" Visibility="{Binding MarkerVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="{Binding SizeScale}" ScaleY="{Binding SizeScale}"></ScaleTransform>
+                    <TranslateTransform X ="{Binding Path=XPos}" Y="{Binding Path=YPos}"/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+
+            <TextBlock Grid.Row="0" Foreground="{Binding IconColor, Converter={StaticResource ColorToSolidBrush}}" FontSize="12"
+            Text="{Binding IconLabel}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="-9,-21,51,35" RenderTransformOrigin="0.538,0.757"></TextBlock>
+
+            <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Rectangle x:Name="DiamondIcon" VerticalAlignment="Center" HorizontalAlignment="Center" Width="6" Height="6"
+                       Stroke="{Binding IconColor, Converter={StaticResource ColorToSolidBrush}}">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="45"/>
+                            <TranslateTransform X="-26.676" Y="-50.51"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+            </StackPanel>
+
+        </Grid>
+
+        <Grid x:Name="RefIcon" Visibility="{Binding RefVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="{Binding SizeScale}" ScaleY="{Binding SizeScale}"></ScaleTransform>
+                    <TranslateTransform X ="{Binding Path=XRefPos}" Y="{Binding Path=YRefPos}"/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+
+            <TextBlock Grid.Row="0" Foreground="{Binding IconColor, Converter={StaticResource ColorToSolidBrush}}" FontSize="12"
+            Text="{Binding RefIconLabel}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="-9,-21,51,35" RenderTransformOrigin="0.538,0.757"/>
+            <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                <Rectangle x:Name="DeltaDiamondIcon" VerticalAlignment="Center" HorizontalAlignment="Center" Width="6" Height="6"
+                       Fill="{Binding IconColor, Converter={StaticResource ColorToSolidBrush}}" >
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="45"/>
+                            <TranslateTransform X="-26.676" Y="-50.51"/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+
+
+</UserControl>

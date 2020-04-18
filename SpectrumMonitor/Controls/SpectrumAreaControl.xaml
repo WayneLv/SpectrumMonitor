@@ -1,0 +1,192 @@
+﻿<UserControl x:Class="SpectrumMonitor.Controls.SpectrumAreaControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:control="clr-namespace:SpectrumMonitor.Controls"
+             xmlns:view="clr-namespace:SpectrumMonitor.ViewModel"
+             xmlns:windows="clr-namespace:SpectrumMonitor.Windows"
+
+             mc:Ignorable="d" Loaded="DisplayLoaded"
+             d:DesignHeight="300" d:DesignWidth="300" Background="Black">
+    <UserControl.Resources>
+        <view:AverageStateToDisplay x:Key="AverageStateToDisplay"></view:AverageStateToDisplay>
+        <!--<view:TraceModeEnumToIndex x:Key="TraceModeEnumToIndex"></view:TraceModeEnumToIndex>-->
+        <view:SpectrumMarkerStateToCusor x:Key="SpectrumMarkerStateToCusor"></view:SpectrumMarkerStateToCusor>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="42"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Rectangle Stroke="LightGray" Grid.Row="1" Grid.Column="1" StrokeThickness="2" Margin="2"/>
+        
+        <Grid Name="SpectrumViewPortContainer" Margin="4" Grid.Row="1" Grid.Column="1"
+              Cursor="{Binding CurrentMarkerState,Converter={StaticResource SpectrumMarkerStateToCusor}}" MouseDown="SpectrumMouseClick">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="220"/>
+            </Grid.ColumnDefinitions>
+
+            <Image Name="SpectrumImageViewport" Grid.ColumnSpan="2" Margin="0" />
+
+            <Grid Name="SpectrumMarkerContainer" Grid.ColumnSpan="2" Margin="0">
+                <ItemsControl ItemsSource="{Binding Path=DisplayMarkers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <control:SpectrumMarkerIcon VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                
+            </Grid>
+            
+            <StackPanel Grid.Column="1" Orientation="Vertical">
+                <ListBox Background="Transparent" Foreground="White" BorderBrush="Transparent"
+                    ItemsSource="{Binding Path=DisplayMarkers}" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding Visible}">
+                                <TextBlock Text="{Binding LabelName}" MinWidth="25" VerticalAlignment="Center"/>
+                                <control:NumericBox  HorizontalAlignment="Left" VerticalAlignment="Top" MinWidth="105" Unit="Hz"
+                                                     Text="{Binding Path=XValueString}" PreviewMouseWheel="MarkerFrequency_PreviewMouseWheel"/>
+                                <TextBlock Text="{Binding YValueString}" HorizontalAlignment="Left" MinWidth="50" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+            
+        </Grid>
+
+        <Grid Name="TopArea" Margin="1" Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Trace Mode:" Grid.Row="0" Grid.Column="0" Foreground="White" FontSize="10" VerticalAlignment="Center"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=TraceModeItems}"
+                      FontSize="10" SelectedIndex="{Binding Path=TraceMode,Mode=TwoWay,Converter={StaticResource TraceModeEnumToIndex}}"></ComboBox>
+
+            <TextBlock Text="Detector Type:" Grid.Row="0" Grid.Column="2" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <ComboBox x:Name="ComboxDetector" Grid.Row="0" Grid.Column="3" ItemsSource="{Binding Path=DetectorTypeItems}"
+                      FontSize="10" SelectedIndex="{Binding Path=DetectorType,Mode=TwoWay,Converter={StaticResource DetectorTypeEnumToIndex}}"></ComboBox>
+
+            <control:DisplayWindowLable x:Name="AverageStateLabel" Grid.Row="0" Grid.Column="4" FontSize="10" Margin="10,2,0,0"
+                                Content="{Binding Path=AverageState,Converter={StaticResource AverageStateToDisplay}}"  
+                                UserWindowType ="{x:Type windows:SpectrumAverageSettingWindow}" />
+
+            <TextBlock Grid.Row="0" Grid.Column="5" Foreground="White" FontSize="10" VerticalAlignment="Center" Margin="5,0,0,0" 
+                       Text="{Binding Path=AverageCounting }" Visibility="{Binding Path=AvgCountingVisibility}"/>
+            <TextBlock Grid.Row="0" Grid.Column="6" Foreground="White" FontSize="10" VerticalAlignment="Center"
+                       Text="/" Visibility="{Binding Path=AvgCountingVisibility}"/>
+            <TextBlock Grid.Row="0" Grid.Column="7" Foreground="White" FontSize="10" VerticalAlignment="Center" 
+                       Text="{Binding Path=AverageNumber }" Visibility="{Binding Path=AvgCountingVisibility}"/>
+
+             <Button Grid.Row="0" Grid.Column="9" Margin="0,0,0,0" Command="{Binding Path=MarkerPeakSearch}" Background="Transparent" BorderBrush="Transparent" Visibility="{Binding Path=CurrentMarkerVisibility}">
+                <StackPanel>
+                    <Image Source="../Images/PeakSearch.png" ToolTip="Peak Search" Width="22" Height="22"></Image>
+                </StackPanel>
+            </Button>
+            <ComboBox Grid.Row="0" Grid.Column="10" ItemsSource="{Binding Path=MarkerItems}"
+                      FontSize="10" SelectedIndex="{Binding Path=CurrentMarker,Mode=TwoWay}"></ComboBox>
+            <ComboBox Grid.Row="0" Grid.Column="11" ItemsSource="{Binding Path=MarkerStateItems}"
+                      FontSize="10" SelectedIndex="{Binding Path=CurrentMarkerState,Mode=TwoWay,Converter={StaticResource MarkerStateEnumToIndex}}"></ComboBox>
+
+        </Grid>
+
+        <Grid Name="LeftArea" Margin="1" Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="18" />
+                <RowDefinition Height="15" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="15" />
+                <RowDefinition Height="15" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="18" />
+                <RowDefinition Height="15" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <control:DisplayWindowLable x:Name="TopLevelLabel" Grid.Row="0" Content="{Binding Path=TopLevel,Converter={StaticResource DoubleToStringDisplay}}"  
+                                UserWindowType ="{x:Type windows:SpectrumAmpSettingWindow}"/>
+            <Label Grid.Row="1" Foreground="White" FontSize="10" HorizontalAlignment="Right">dBm</Label>
+            <TextBlock Grid.Row="3" FontSize="10" Text="{Binding DBPerDiv,Converter={StaticResource DoubleToStringDisplay}}" HorizontalAlignment="Right" Foreground="White"></TextBlock>
+            <Label Grid.Row="4" Foreground="White" FontSize="10" HorizontalAlignment="Right">dB/Div</Label>
+            <control:DisplayWindowLable x:Name="BottomLevelLabel" Grid.Row="6" Content="{Binding Path=BottomLevel,Converter={StaticResource DoubleToStringDisplay}}"  
+                                UserWindowType ="{x:Type windows:SpectrumAmpSettingWindow}" />
+            <Label Grid.Row="7" Foreground="White" FontSize="10" HorizontalAlignment="Right">dBm</Label>
+
+        </Grid>
+
+        <Grid Name="BottomArea" Margin="1" Grid.Row="2" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="18" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Margin="0,0,5,0">Start Freq</Label>
+            <control:DisplayWindowLable x:Name="StartFreqLabel" Grid.Column="1" Content="{Binding Path=StartFrequency,Converter={StaticResource DoubleToFreqDisplay}}"  
+                                UserWindowType ="{x:Type windows:SpectrumFreqSettingWindow}"/>
+
+            <Label Grid.Column="2" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Margin="20,0,5,0">RBW</Label>
+            <control:DisplayWindowLable x:Name="RBWLabel" Grid.Column="3" Content="{Binding Path=RBW,Converter={StaticResource DoubleToFreqDisplay}}"  
+                                UserWindowType ="{x:Type windows:SpectrumFreqSettingWindow}"/>
+
+
+            <Label Grid.Column="5" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Margin="0,0,5,0">Center Freq</Label>
+            <TextBlock Grid.Column="6" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Text="{Binding Path=Center,Converter={StaticResource DoubleToFreqDisplay}}"/> 
+
+            <Label Grid.Column="8" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Margin="0,0,5,0">Stop Freq</Label>
+            <control:DisplayWindowLable x:Name="StopFreqLabel" Grid.Column="9" Content="{Binding Path=StopFrequency,Converter={StaticResource DoubleToFreqDisplay}}"  
+                                UserWindowType ="{x:Type windows:SpectrumFreqSettingWindow}"/>
+
+        </Grid>
+
+    </Grid>
+</UserControl>

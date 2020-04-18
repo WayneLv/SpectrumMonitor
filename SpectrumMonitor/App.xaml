@@ -1,0 +1,22 @@
+﻿<Application x:Class="SpectrumMonitor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:SpectrumMonitor"
+             xmlns:view="clr-namespace:SpectrumMonitor.ViewModel"
+             Startup="Application_Startup">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes\Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <view:DoubleToStringDisplay x:Key="DoubleToStringDisplay"></view:DoubleToStringDisplay>
+            <view:OnOffStateToImage x:Key="OnOffStateToImage"></view:OnOffStateToImage>
+            <view:MarkerStateEnumToIndex x:Key="MarkerStateEnumToIndex"></view:MarkerStateEnumToIndex>
+            <view:DoubleToFreqDisplay x:Key="DoubleToFreqDisplay"></view:DoubleToFreqDisplay>
+            <view:ColorToSolidBrush x:Key="ColorToSolidBrush"></view:ColorToSolidBrush>
+            <view:TraceModeEnumToIndex x:Key="TraceModeEnumToIndex"></view:TraceModeEnumToIndex>
+            <view:DetectorTypeEnumToIndex x:Key="DetectorTypeEnumToIndex"></view:DetectorTypeEnumToIndex>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

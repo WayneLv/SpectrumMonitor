@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="SpectrumMonitor.Controls.MenuAreaControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpectrumMonitor.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0">
+            <Menu Margin="1,0,0,0" FontSize="12">
+                <MenuItem Header="_File" Margin="0,0,0,0" VerticalContentAlignment="Center">
+                    <MenuItem Header="New" Command="{Binding Path=InitCustomIqParameters}"/>
+                    <MenuItem Header="Save as..." Command="{Binding Path=SaveCustomIqParameters}"/>
+                    <MenuItem Header="Load State File" Command="{Binding Path=RecallCustomIqParameters}"/>
+                    <MenuItem Header="Save State File" Command="{Binding Path=ExportStateData}"/>
+                    <Separator />
+                    <MenuItem Header="Exit" Command="{Binding Path=ExitProgramCommand, Mode=OneWay}" CommandParameter="{Binding ElementName=CustomIqMainWindow}"/>
+                </MenuItem>
+                <MenuItem Header="_Control" VerticalContentAlignment="Center">
+                    <MenuItem Header="Connect" Command="{Binding Path=DownloadCustomIqParameters}"/>
+                    <MenuItem Header="Update" Command="{Binding Path=UpdateWaveforms}"/>
+                    <MenuItem Header="Connect" Command="{Binding Path=DownloadCustomIqParameters}"/>
+                </MenuItem>
+                <MenuItem Header="_User" VerticalContentAlignment="Center">
+                    <MenuItem Header="Register" Command="{Binding Path=ShowHelpFile}"/>
+                    <MenuItem Header="Dispose" Command="{Binding Path=OpenWebSite}"/>
+                    <MenuItem Header="Change Password" Command="{Binding Path=ShowAboutWindow}"/>
+                </MenuItem>
+                <MenuItem Header="_Help" VerticalContentAlignment="Center">
+                    <MenuItem Header="Contents" Command="{Binding Path=ShowHelpFile}"/>
+                    <Separator />
+                    <MenuItem Header="Website" Command="{Binding Path=OpenWebSite}"/>
+                    <Separator />
+                    <MenuItem Header="About" Command="{Binding Path=ShowAboutWindow}"/>
+                </MenuItem>
+            </Menu>
+            <GridSplitter Height="6" BorderThickness="1" BorderBrush="DarkSlateGray"
+            VerticalAlignment="Center" HorizontalAlignment="Stretch" IsEnabled="False" Background="{StaticResource PressedBorderBrush}">
+            </GridSplitter>
+        </StackPanel>
+    </Grid>
+</UserControl>

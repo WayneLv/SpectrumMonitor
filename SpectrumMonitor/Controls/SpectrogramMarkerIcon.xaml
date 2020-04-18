@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="SpectrumMonitor.Controls.SpectrogramMarkerIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpectrumMonitor.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="60" Background="Transparent">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="SpectromMarkerIcon" Visibility="{Binding MarkerVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="{Binding SizeScale}" ScaleY="{Binding SizeScale}"></ScaleTransform>
+                    <TranslateTransform X ="{Binding Path=XPos}" Y="{Binding Path=ZPos}"/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+
+            <StackPanel Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Line X1="-8" Y1="0" X2="8" Y2="0" Stroke="{Binding IconColor, Converter={StaticResource ColorToSolidBrush}}"/>
+                <Line X1="0" Y1="-8" X2="0" Y2="8" Stroke="{Binding IconColor, Converter={StaticResource ColorToSolidBrush}}"/>
+            </StackPanel>
+
+            <TextBlock Foreground="{Binding IconColor, Converter={StaticResource ColorToSolidBrush}}" FontSize="12"
+            Text="{Binding IconLabel}" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="-9,0,51,10" RenderTransformOrigin="0.538,0.757"></TextBlock>
+
+
+        </Grid>
+
+    </Grid>
+
+</UserControl>

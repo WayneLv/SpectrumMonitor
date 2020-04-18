@@ -1,0 +1,97 @@
+﻿<Window x:Class="SpectrumMonitor.Windows.SettingPanelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpectrumMonitor.Windows"
+        xmlns:control="clr-namespace:SpectrumMonitor.Controls"
+        mc:Ignorable="d"
+        Title="SettingPanelWindow" Height="600" Width="620">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="300" />
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Spectrum Settings" Grid.Row="0" Grid.Column="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="35"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Trace Mode:" Grid.Row="0" Grid.Column="0" Foreground="White" FontSize="10" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=TraceModeItems}"
+                      FontSize="10" SelectedIndex="{Binding Path=TraceMode,Mode=TwoWay,Converter={StaticResource TraceModeEnumToIndex}}"></ComboBox>
+
+                <TextBlock Text="Detector Type:" Grid.Row="1" Grid.Column="0" Foreground="White" FontSize="10" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=DetectorTypeItems}"
+                      FontSize="10" SelectedIndex="{Binding Path=DetectorType,Mode=TwoWay,Converter={StaticResource DetectorTypeEnumToIndex}}"></ComboBox>
+
+                <Label Grid.Row="2" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Right">Average State:</Label>
+                <CheckBox Grid.Row="2" Grid.Column="1" Margin="5,10,0,0" 
+                  IsChecked="{Binding Path=AverageState}"></CheckBox>
+
+                <Label Grid.Row="3" Grid.Column="0" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Right">AverageNumber:</Label>
+                <control:NumericBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"
+                            MaxValue="10000" MinValue="1" Digits="0" CurValue="{Binding Path= AverageNumber,Mode=TwoWay}"></control:NumericBox>
+
+                <Label Grid.Row="4" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Right">Top Level:</Label>
+                <control:NumericBox Grid.Row="4" Grid.Column="1" Margin="0,5,0,0"
+                            MaxValue="100" MinValue="-200" Digits="2" CurValue="{Binding Path= TopLevel,Mode=TwoWay}"></control:NumericBox>
+                <Label Grid.Row="4" Grid.Column="2" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Left">dBm</Label>
+
+
+                <Label Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Right">Bottom Level:</Label>
+                <control:NumericBox Grid.Row="5" Grid.Column="1" Margin="0,0,0,5"
+                            MaxValue="100" MinValue="-200" Digits="2" CurValue="{Binding Path= BottomLevel,Mode=TwoWay}"></control:NumericBox>
+                <Label Grid.Row="5" Grid.Column="2" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Left">dBm</Label>
+
+
+                <Label Grid.Row="6" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Right">Start Freq:</Label>
+                <control:NumericBox Grid.Row="6" Grid.Column="1" Margin="0,5,0,0" Unit="Hz"
+                            Text="{Binding Path= StartFrequency,Mode=TwoWay,Converter={StaticResource DoubleToFreqDisplay}}"></control:NumericBox>
+                <Label Grid.Row="7" Grid.Column="0" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Right">Stop Freq:</Label>
+                <control:NumericBox Grid.Row="7" Grid.Column="1" Margin="0,0,0,5" Unit="Hz"
+                            Text="{Binding Path= StopFrequency,Mode=TwoWay,Converter={StaticResource DoubleToFreqDisplay}}"></control:NumericBox>
+                <Label Grid.Row="8" Grid.Column="0" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Right">RBW:</Label>
+                <control:NumericBox Grid.Row="8" Grid.Column="1" Margin="0,0,0,5" Unit="Hz"
+                            Text="{Binding Path= RBW,Mode=TwoWay,Converter={StaticResource DoubleToFreqDisplay}}"></control:NumericBox>
+
+
+
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Save Settings" Grid.Row="0" Grid.Column="1">
+
+
+        </GroupBox>
+
+        <GroupBox Header="Device Settings" Grid.Row="1" Grid.Column="0">
+
+
+        </GroupBox>
+        
+
+    </Grid>
+</Window>

@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C1825841-8C78-40EC-AC75-79F5879AC874}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SpectrumMonitor</RootNamespace>
+    <AssemblyName>SpectrumMonitor</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WriteableBitmapEx.wpf">
+      <HintPath>DLLs\WriteableBitmapEx.wpf.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Controls\DisplayWindowLable.xaml.cs">
+      <DependentUpon>DisplayWindowLable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FunctionAreaControl.xaml.cs">
+      <DependentUpon>FunctionAreaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\IndicatorAreaControl.xaml.cs">
+      <DependentUpon>IndicatorAreaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MenuAreaControl.xaml.cs">
+      <DependentUpon>MenuAreaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NumericTextBox.cs" />
+    <Compile Include="Controls\SignalTableAreaControl.xaml.cs">
+      <DependentUpon>SignalTableAreaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SpectrogramAreaControl.xaml.cs">
+      <DependentUpon>SpectrogramAreaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SpectrogramMarkerIcon.xaml.cs">
+      <DependentUpon>SpectrogramMarkerIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SpectrumAreaControl.xaml.cs">
+      <DependentUpon>SpectrumAreaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SpectrumMarkerIcon.xaml.cs">
+      <DependentUpon>SpectrumMarkerIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TempContent.xaml.cs">
+      <DependentUpon>TempContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WindowButton.cs" />
+    <Compile Include="ViewModel\AbstractModel.cs" />
+    <Compile Include="ViewModel\Command.cs" />
+    <Compile Include="ViewModel\FunctionViewModel.cs" />
+    <Compile Include="ViewModel\IndicatorViewModel.cs" />
+    <Compile Include="ViewModel\GridViewSort.cs" />
+    <Compile Include="ViewModel\MarkerViewModel.cs" />
+    <Compile Include="ViewModel\MenuViewModel.cs" />
+    <Compile Include="ViewModel\RegisterControlViewModel.cs" />
+    <Compile Include="ViewModel\SettingPanelViewModel.cs" />
+    <Compile Include="ViewModel\SignalCharactersViewModel.cs" />
+    <Compile Include="ViewModel\SignalTableAreaViewModel.cs" />
+    <Compile Include="ViewModel\SpctrumMonitorViewModel.cs" />
+    <Compile Include="ViewModel\SpectrogramAreaViewModel.cs" />
+    <Compile Include="ViewModel\SpectrumAreaViewModel.cs" />
+    <Compile Include="Windows\DeviceInfo.xaml.cs">
+      <DependentUpon>DeviceInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ErrorInfo.xaml.cs">
+      <DependentUpon>ErrorInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\RegisterControl.xaml.cs">
+      <DependentUpon>RegisterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SearchDevice.xaml.cs">
+      <DependentUpon>SearchDevice.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SettingPanelWindow.xaml.cs">
+      <DependentUpon>SettingPanelWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SpectrumAmpSettingWindow.xaml.cs">
+      <DependentUpon>SpectrumAmpSettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SpectrumAverageSettingWindow.xaml.cs">
+      <DependentUpon>SpectrumAverageSettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SpectrumFreqSettingWindow.xaml.cs">
+      <DependentUpon>SpectrumFreqSettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Controls\DisplayWindowLable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FunctionAreaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\IndicatorAreaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MenuAreaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SignalTableAreaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SpectrogramAreaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SpectrogramMarkerIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SpectrumAreaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SpectrumMarkerIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TempContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Themes\Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\DeviceInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ErrorInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\RegisterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SearchDevice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SettingPanelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SpectrumAmpSettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SpectrumAverageSettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SpectrumFreqSettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InstrumentDriverCore\InstrumentDriverCore.csproj">
+      <Project>{DF43BC63-C71B-47C2-9C62-8B48E6358909}</Project>
+      <Name>InstrumentDriverCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InstrumentDriver\InstrumentDriver.csproj">
+      <Project>{992B19ED-47A5-42CE-BA38-514F82D70460}</Project>
+      <Name>InstrumentDriver</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Help.png" />
+    <Resource Include="Images\Open.png" />
+    <Resource Include="Images\Pause.png" />
+    <Resource Include="Images\register.png" />
+    <Resource Include="Images\Restart.png" />
+    <Resource Include="Images\Save.png" />
+    <Resource Include="Images\Settings.png" />
+    <Resource Include="Images\Zoom In.ico" />
+    <Resource Include="Images\Zoom Out.ico" />
+    <Resource Include="Images\ZoomInScale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Off.png" />
+    <Resource Include="Images\On.png" />
+    <Resource Include="Images\PowerOff.png" />
+    <Resource Include="Images\PowerOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\PeakSearch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Down.png" />
+    <Resource Include="Images\Up.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

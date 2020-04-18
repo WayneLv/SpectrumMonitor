@@ -1,0 +1,41 @@
+﻿<Window x:Class="SpectrumMonitor.Windows.SpectrumAmpSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpectrumMonitor.Windows"
+        xmlns:control="clr-namespace:SpectrumMonitor.Controls"
+        mc:Ignorable="d" WindowStartupLocation="CenterOwner"
+        Title="Level Setting" Height="130" Width="200" Background="Black">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Rectangle Stroke="LightGray" Grid.RowSpan="2" Grid.ColumnSpan="3" Margin="3"/>
+        <Label Grid.Row="0" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Right">Top Level:</Label>
+        <!--<TextBox Grid.Row="0" Grid.Column="1" Margin="0,5,0,0" Text="{Binding Path=TopLevel,UpdateSourceTrigger=LostFocus,Converter={StaticResource DoubleToStringDisplay}}" PreviewMouseWheel="TextBox_PreviewMouseWheel"></TextBox>-->
+        <control:NumericBox Grid.Row="0" Grid.Column="1" Margin="0,5,0,0"
+                            MaxValue="100" MinValue="-200" Digits="2" CurValue="{Binding Path= TopLevel,Mode=TwoWay}"></control:NumericBox>
+        
+        <Label Grid.Row="0" Grid.Column="2" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Left">dBm</Label>
+
+
+        <Label Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Right">Bottom Level:</Label>
+        <!--<TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" Text="{Binding Path=BottomLevel,UpdateSourceTrigger=LostFocus,Converter={StaticResource DoubleToStringDisplay}}" PreviewMouseWheel="TextBox_PreviewMouseWheel"></TextBox>-->
+        <control:NumericBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"
+                            MaxValue="100" MinValue="-200" Digits="2" CurValue="{Binding Path= BottomLevel,Mode=TwoWay}"></control:NumericBox>
+
+        <Label Grid.Row="1" Grid.Column="2" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Left">dBm</Label>
+
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Width="60" Click="Button_Click">OK</Button>
+    </Grid>
+</Window>
