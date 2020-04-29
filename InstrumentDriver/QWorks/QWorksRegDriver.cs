@@ -10,13 +10,12 @@ namespace InstrumentDriver.SpectrumMonitor
 {
     public class QWorksRegDriver : IRegDriver
     {
+        private uint mDeviceID = 0;
 
         public QWorksRegDriver()
         {
-            uint devnum = 0;
-
-            Qworks.Initialize(ref devnum);
-            if (devnum < 1)
+            Qworks.Initialize(ref mDeviceID);
+            if (mDeviceID < 1)
             {
                 
             }

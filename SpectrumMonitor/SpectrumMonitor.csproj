@@ -119,6 +119,7 @@
     <Compile Include="ViewModel\IndicatorViewModel.cs" />
     <Compile Include="ViewModel\GridViewSort.cs" />
     <Compile Include="ViewModel\MarkerViewModel.cs" />
+    <Compile Include="ViewModel\MaskDataViewModel.cs" />
     <Compile Include="ViewModel\MenuViewModel.cs" />
     <Compile Include="ViewModel\RegisterControlViewModel.cs" />
     <Compile Include="ViewModel\SettingPanelViewModel.cs" />
@@ -153,6 +154,9 @@
     </Compile>
     <Compile Include="Windows\SpectrumFreqSettingWindow.xaml.cs">
       <DependentUpon>SpectrumFreqSettingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MaskDataSetting.xaml.cs">
+      <DependentUpon>MaskDataSetting.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\DisplayWindowLable.xaml">
       <SubType>Designer</SubType>
@@ -243,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SpectrumFreqSettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MaskDataSetting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

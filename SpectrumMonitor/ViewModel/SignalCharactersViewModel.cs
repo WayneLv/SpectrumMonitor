@@ -7,6 +7,8 @@ namespace SpectrumMonitor.ViewModel
 {
     public class SignalCharactersViewModel: AbstractModel
     {
+        private bool mSyncCdc = false;
+
         public SignalCharactersViewModel(double freq, double bw, double power, bool isTd)
         {
             Frequency = freq;
@@ -23,7 +25,15 @@ namespace SpectrumMonitor.ViewModel
 
         public double Power { get; } = -100;
 
-        public bool SyncCdc { get; set; } = false;
+        public bool SyncCdc
+        {
+            get => mSyncCdc;
+            set
+            {
+                mSyncCdc = value;
+                NotifyPropertyChanged((() => SyncCdc));
+            }
+        }
     }
 
     public sealed class SignalListView : ListView
@@ -40,7 +50,6 @@ namespace SpectrumMonitor.ViewModel
 
                 signalview.Foreground = (signaldata.Power > 0) ? Brushes.Red : Brushes.Blue;
                 signalview.Background = signaldata.IsTdSignal ? Brushes.DarkKhaki : Brushes.DarkGray;
-
 
             }
 

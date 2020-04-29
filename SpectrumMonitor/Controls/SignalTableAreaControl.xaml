@@ -21,6 +21,7 @@
             <view:SignalListView ItemsSource="{Binding Path=DisplaySignalList}" 
                                  IsSynchronizedWithCurrentItem="True" 
                                  view:GridViewSort.AutoSort="True">
+
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Style.Triggers>
@@ -33,15 +34,18 @@
 
                 <ListView.View>
                     <GridView AllowsColumnReorder="True">
-                        <GridViewColumn Header="Frequency" DisplayMemberBinding="{Binding Frequency}" Width="100" view:GridViewSort.PropertyName="Frequency"/>
+                        <GridViewColumn Header="Frequency" DisplayMemberBinding="{Binding Frequency}" Width="90" view:GridViewSort.PropertyName="Frequency"/>
                         <GridViewColumn Header="Power" DisplayMemberBinding="{Binding Power}" Width="70"  view:GridViewSort.PropertyName="Power"/>
                         <GridViewColumn Header="Bandwidth" DisplayMemberBinding="{Binding BandWidth}" Width="100" view:GridViewSort.PropertyName="BandWidth"/>
                         <GridViewColumn Header="Is TD Signal" DisplayMemberBinding="{Binding IsTdSignal}" 
                                         Width="90" view:GridViewSort.PropertyName="IsTdSignal"/>
-                        <GridViewColumn Header="Sync CDC" Width="60">
+                        <GridViewColumn Header="Sync CDC" Width="60" view:GridViewSort.PropertyName="SyncCdc">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding SyncCdc}" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{Binding Path=SyncCdc, Mode=TwoWay}"  />
+                                    <TextBlock Text="{Binding SyncCdc}"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>

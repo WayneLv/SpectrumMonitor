@@ -28,5 +28,6 @@ namespace SpectrumMonitor.Controls
 
             DataContext = mainViewModel.SignalTableAreaViewModel;
         }
+
     }
 }

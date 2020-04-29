@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using SpectrumMonitor.Windows;
 
 namespace SpectrumMonitor.ViewModel
 {
@@ -42,6 +43,8 @@ namespace SpectrumMonitor.ViewModel
 
         public ObservableCollection<Marker> mDisplayMarkers = new ObservableCollection<Marker>();
 
+        private MaskDataListViewModel mTriggerMaskData = new MaskDataListViewModel("Trigger Mask Points");
+
         public SpectrumAreaViewModel(SpctrumMonitorViewModel mainviewmodel)
         {
             mInstr = mainviewmodel.Instrument as SpectrumMonitorInstrument;
@@ -54,6 +57,10 @@ namespace SpectrumMonitor.ViewModel
 
                 mMarkerItems.Add("Marker" + (i+1).ToString());
             }
+
+
+            mTriggerMaskData.MaskDataList.Add(new MaskData(StartFrequency,TopLevel));
+            mTriggerMaskData.MaskDataList.Add(new MaskData(StopFrequency, TopLevel));
         }
 
         public double[] LastSpectrumData { get; set; } = new double[0];
@@ -115,6 +122,11 @@ namespace SpectrumMonitor.ViewModel
         public List<string> DetectorTypeItems
         {
             get { return mDetectorTypeItems; }
+        }
+
+        public MaskDataListViewModel TriggerMaskData
+        {
+            get => mTriggerMaskData;
         }
 
         public int CurrentMarker
@@ -554,6 +566,18 @@ namespace SpectrumMonitor.ViewModel
             }
 
             SetCurrentMarkerXIndex((double)maxIndex/ LastSpectrumData.Length);
+        }
+
+
+        RelayCommand mShowTriggerMaskWindow;
+        public ICommand ShowRegisterWindow
+        {
+            get { return mShowTriggerMaskWindow ?? (mShowTriggerMaskWindow = new RelayCommand(() => DoShowTriggerMaskWindow())); }
+        }
+        public void DoShowTriggerMaskWindow()
+        {
+            MaskDataSetting triggerMaskWindow = new MaskDataSetting(TriggerMaskData);
+            triggerMaskWindow.ShowDialog();
         }
 
     }

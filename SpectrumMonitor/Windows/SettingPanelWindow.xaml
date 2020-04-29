@@ -88,7 +88,11 @@
         </GroupBox>
 
         <GroupBox Header="Device Settings" Grid.Row="1" Grid.Column="0">
-
+            <Button Margin="0,0,5,0" Command="{Binding Path=ShowRegisterWindow}" Background="Transparent" BorderBrush="Transparent">
+                <StackPanel>
+                    <Image Source="../Images/register.png" ToolTip="Show register control panel" Width="22" Height="22"></Image>
+                </StackPanel>
+            </Button>
 
         </GroupBox>
         

@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="FunctionSupport\SignalCharacters.cs" />
     <Compile Include="QWorks\Qworks.cs" />
+    <Compile Include="QWorks\RegAccessWrapper.cs" />
     <Compile Include="RegDef\M9410ReceiverRegDefs.cs" />
     <Compile Include="RegDef\ReceiverDspRegisterSet.cs" />
     <Compile Include="RegDef\SoftwareLatchDefs.cs" />
