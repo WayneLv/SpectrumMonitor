@@ -1,5 +1,4 @@
-﻿using SpectrumMonitor.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,18 +11,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SpectrumMonitor.ViewModel;
 
 namespace SpectrumMonitor.Windows
 {
     /// <summary>
-    /// Interaction logic for RegisterControl.xaml
+    /// Interaction logic for AddressAccessWindow.xaml
     /// </summary>
-    public partial class RegisterControl : Window
+    public partial class AddressAccessWindow : Window
     {
         private SpctrumMonitorViewModel mMainViewModel;
         RegisterControlViewModel mViewModel;
-
-        public RegisterControl(AbstractModel mainViewModel)
+        public AddressAccessWindow(AbstractModel mainViewModel)
         {
             InitializeComponent();
 
@@ -36,28 +35,16 @@ namespace SpectrumMonitor.Windows
             }
             else
             {
-                mMainViewModel = (SpctrumMonitorViewModel) mainViewModel;
+                mMainViewModel = mainViewModel as SpctrumMonitorViewModel;
                 mViewModel = mMainViewModel?.RegisterControlViewModel;
             }
 
             DataContext = mViewModel;
-            
         }
 
-        
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void AddressAccessWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            mViewModel.RegisterGroupIndex = 0;
-            mViewModel.RegisterIndex = 0;
-
             mViewModel.UpdateErrorMessage(true);
-        }
-
-        private void AddressAccess_Click(object sender, RoutedEventArgs e)
-        {
-            AddressAccessWindow addressAccessWindow = new AddressAccessWindow(mMainViewModel);
-            addressAccessWindow.ShowDialog();
         }
 
         private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)

@@ -80,7 +80,6 @@ namespace SpectrumMonitor.ViewModel
             mIsMornitoring = false;
             IsBlink = true;
 
-            mMainViewModel.LatestMessage = mInstr.Name;
 
         }
 
@@ -110,7 +109,7 @@ namespace SpectrumMonitor.ViewModel
         }
         public void DoShowRegisterWindow()
         {
-            RegisterControl regWindow = new RegisterControl(mMainViewModel.RegisterControlViewModel);
+            RegisterControl regWindow = new RegisterControl(mMainViewModel);
             regWindow.ShowDialog();
         }
 
@@ -125,7 +124,27 @@ namespace SpectrumMonitor.ViewModel
             settingWindow.ShowDialog();
         }
 
+        RelayCommand mShowErrors;
+        public ICommand ShowErrors
+        {
+            get { return mShowErrors ?? (mShowErrors = new RelayCommand(() => DoShowErrors())); }
+        }
+        public void DoShowErrors()
+        {
+            ErrorInfo errWindow = new ErrorInfo(mMainViewModel);
+            errWindow.ShowDialog();
+        }
 
+        private RelayCommand mShowDeviceInfo;
+        public ICommand ShowDeviceInfo
+        {
+            get { return mShowDeviceInfo ?? (mShowDeviceInfo = new RelayCommand(() => DoShowDeviceInfo())); }
+        }
+        public void DoShowDeviceInfo()
+        {
+            DeviceInfoWindow deviceinfoWindow = new DeviceInfoWindow(mMainViewModel);
+            deviceinfoWindow.ShowDialog();
+        }
 
         private void ContinuousSpecSweep()
         {
@@ -182,7 +201,7 @@ namespace SpectrumMonitor.ViewModel
             List<ISignalCharacters> signallist= new List<ISignalCharacters>();
             while (mIsMornitoring)
             {
-                ((SpectrumMonitorInstrument)mInstr).ReadSignaCharacter(ref signallist);
+                ((SpectrumMonitorInstrument)mInstr).ReadSignalCharacter(ref signallist);
 
                 mMainViewModel.SignalTableAreaViewModel.UpdateData(signallist);
 

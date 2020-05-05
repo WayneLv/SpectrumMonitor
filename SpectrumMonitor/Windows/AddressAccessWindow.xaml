@@ -1,0 +1,124 @@
+﻿<Window x:Class="SpectrumMonitor.Windows.AddressAccessWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpectrumMonitor.Windows"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen" Loaded="AddressAccessWindow_OnLoaded"
+        Title="AddressAccessWindow" Height="620" Width="480" SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+
+        <Label Grid.Row="0" Grid.Column="0" Foreground="Blue" VerticalAlignment="Center" Margin="2" >  Address Type:</Label>
+        <ComboBox Grid.Row="0" Grid.Column="1" Margin="5" ItemsSource="{Binding Path=AddressType}"
+                  SelectedItem="{Binding Path=SelectedAddressType}" />
+
+        <!-- Write data/controls -->
+        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" BorderBrush="Gray" BorderThickness="2"
+                  Header="Write" Visibility="{Binding Path=WriteVisibility}" KeyboardNavigation.TabNavigation="Local">
+            <Grid Margin="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="AddressLabel" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0">Address:</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding WriteAddress}" />
+                <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding IsWriteFromFile}">
+                    Write from file (binary)
+                </CheckBox>
+                <Label Grid.Row="3" Grid.Column="0" Visibility="{Binding WriteFromFileVisibility}">File:</Label>
+                <TextBox Grid.Row="3" Grid.Column="1" MaxWidth="350" MinWidth="300" Visibility="{Binding WriteFromFileVisibility}"
+                         Text="{Binding WriteFromFilePath}" TextWrapping="NoWrap" />
+                <Button Grid.Row="3" Grid.Column="2" Command="{Binding Path=WriteBrowse}" Margin="2"
+                        Visibility="{Binding WriteFromFileVisibility}">...</Button>
+                <Label Grid.Row="3" Grid.Column="0" Visibility="{Binding MemoryWriteFromPanelVisibility}">
+                    Bytes to Write (hex):
+                </Label>
+                <StackPanel Grid.Row="3" Grid.Column="0" Visibility="{Binding RegWriteFromPanelVisibility}">
+                    <Label>Registers to Write </Label>
+                    <Label>(',' to seperate): </Label>
+                </StackPanel>
+                <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="150" MaxWidth="350" MinWidth="300"
+                         VerticalContentAlignment="Top" Text="{Binding WriteData}" FontFamily="Courier New"
+                         AcceptsReturn="True" 
+                         Visibility="{Binding WriteFromPanelVisibility}" />
+                <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <Button Command="{Binding Path=WriteAddressCommand}" Margin="2" MinWidth="80">Write</Button>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <!-- Read data/controls -->
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" BorderBrush="Black" BorderThickness="2"
+                  Header="Read" Visibility="{Binding Path=ReadVisibility}" KeyboardNavigation.TabNavigation="Local">
+            <Grid Margin="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="AddressLabel" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0">Address:</Label>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ReadAddress}" Grid.ColumnSpan="2" />
+                
+                <Label Grid.Row="2" Grid.Column="0">Length to read:</Label>
+                <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding LengthToRead}" />
+                <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsInHex}">
+                    In Hex
+                </CheckBox>
+                <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding IsReadToFile}">
+                    Read to file (binary)
+                </CheckBox>
+                <Label Grid.Row="5" Grid.Column="0" Visibility="{Binding ReadToFileVisibility}">File:</Label>
+                <TextBox Grid.Row="5" Grid.Column="1" MaxWidth="350" Visibility="{Binding ReadToFileVisibility}"
+                         Text="{Binding ReadToFilePath}" TextWrapping="NoWrap" />
+                <Button Grid.Row="5" Grid.Column="2" Command="{Binding Path=ReadBrowse}" Margin="2"
+                        Visibility="{Binding ReadToFileVisibility}">...</Button>
+                <Label Grid.Row="5" Grid.Column="0" Visibility="{Binding ReadToPanelVisibility}">Read Values:</Label>
+                <TextBox Grid.Row="5" Grid.Column="1" Height="150" MaxWidth="350" VerticalContentAlignment="Top"
+                         Text="{Binding ReadData}" IsReadOnly="True" FontFamily="Courier New" Grid.ColumnSpan="2"
+                         Visibility="{Binding ReadToPanelVisibility}" />
+                <StackPanel Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <Button Command="{Binding Path=ReadAddressCommand}" Margin="2" MinWidth="80">Read</Button>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <StatusBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="25" Background="Black" Cursor="Hand" Foreground="Gold" VerticalAlignment="Center"
+                MouseDoubleClick="Control_OnMouseDoubleClick">
+            <TextBlock Text="{Binding Path=LatestMessage,Mode=OneWay}"/>
+        </StatusBar>
+
+    </Grid>
+</Window>

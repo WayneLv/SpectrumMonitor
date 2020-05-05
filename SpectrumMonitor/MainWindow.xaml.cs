@@ -44,5 +44,17 @@ namespace SpectrumMonitor
 
         }
 
+        private void MainWindow_OnClosed(object sender, EventArgs e)
+        {
+            mSpctrumMonitorViewModel.Instrument.Close();
+            System.Environment.Exit(0);
+        }
+
+        private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ErrorInfo errWindow = new ErrorInfo(mSpctrumMonitorViewModel);
+            errWindow.ShowDialog();
+            mSpctrumMonitorViewModel.UpdateErrorMessage();
+        }
     }
 }

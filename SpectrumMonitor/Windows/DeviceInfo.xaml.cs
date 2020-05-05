@@ -11,17 +11,27 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SpectrumMonitor.ViewModel;
 
 namespace SpectrumMonitor.Windows
 {
     /// <summary>
     /// Interaction logic for DeviceInfo.xaml
     /// </summary>
-    public partial class DeviceInfo : Window
+    public partial class DeviceInfoWindow : Window
     {
-        public DeviceInfo()
+        private SpctrumMonitorViewModel mMainViewModel;
+        public DeviceInfoWindow(SpctrumMonitorViewModel mainViewModel)
         {
             InitializeComponent();
+
+            mMainViewModel = mainViewModel;
+            DataContext = mMainViewModel.DeviceInfoViewModel;
+        }
+
+        private void DeviceInfo_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            mMainViewModel.DeviceInfoViewModel.DoRefreshDeviceInfo();
         }
     }
 }

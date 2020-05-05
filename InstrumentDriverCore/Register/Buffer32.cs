@@ -102,7 +102,7 @@ namespace InstrumentDriver.Core.Register
         /// If IsMemoryMapped==true, this register reads/writes directly to some memory
         /// location (as opposed to interacting with other registers or serial devices).
         /// The main use for this distinction is for refreshing blocks of registers by
-        /// performing a single buffer read (see MemoryMappedRegDriver.RegRefresh for
+        /// performing a single buffer read (see MemoryMappedControlRegDriver.RegRefresh for
         /// an example coding).
         /// </summary>
         public virtual bool IsMemoryMapped

@@ -5,34 +5,71 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
+
+/// <summary>
+/// This file is a Dll importer for QWorks functions, it is generated referring to "qworks.h"
+/// </summary>
+
 namespace DeviceFunctionDriver
 {
+    public enum EnumF0Info
+    {
+        F0Info_Bit = 0x8,   //FPGA0 bit版本 输出数据解析方式, 年:[31:24]+2000, 月:[23:16], 日[15:8], 时[7:0].
+        F0Info_Elf = 0xc,   //FPGA0 elf版本 输出数据解析方式, 年:[31:24]+2000, 月:[23:16], 日[15:8], 时[7:0].
+    };
+    public enum EnumF1Info
+    {
+        F1Info_Version = 0, //FPGA1 bit版本 输出数据解析方式, 日:[31:27], 月:[26:23], 年[22:17]+2000, 时[16:12], 分:[11:6], 秒[5:0].
+        F1Info_StandingTime,//FPGA1 运行时间 输出数据解析方式, 时:[16:12], 分[11:6], 秒[5:0].
+        F1Info_ClockFreq,   //FPGA1 时钟参数 Date*1.024/1000
+        F1Info_BitState,    //FPGA1 bit状态 1为成功 0为失败
+        F1Info_F1F0Link,    //FPGA0与FPGA1连接情况 1为成功 0为失败
+    };
+    public struct SensorInfo
+    {
+        public float F0VCCINT;
+        public float F0VCCAUX;
+        public float F0Temperature;
+        public float F1VCCINT;
+        public float F1VCCAUX;
+        public float F1Temperature;
+        public float F1VCCINTMAX;
+        public float F1VCCAUXMAX;
+        public float F1TemperatureMax;
+        public float QGFVoltage12;
+        public float QGFCurrent12;
+        public float QGFVoltage5;
+        public float QGFCurrent5;
+        public float QGFTemperature0;
+        public float QGFTemperature1;
+        public float QGFTemperature2;
+        public float QGFTemperature3;
+    };
+
+    public struct QGFInfoPara
+    {
+        byte Header;
+        byte CardType;   //母版类型
+        byte Revision;
+        byte F1Type;     //FPGA类型
+        ushort MacAddr;
+        ushort ID;         //母版编号
+        byte Year;
+        byte Week;
+        byte IP0;
+        byte IP1;
+        byte IP2;
+        byte IP3;
+        byte Null;
+        byte End;
+    };
+
     public class Qworks
     {
-
         public static int MaxDevsSum = 32;
 
         public delegate void FuncIntHandler(IntPtr pData);
-        public struct S_SensorInfo
-        {
-            double F0VCCINT;
-            double F0VCCAUX;
-            double F0Temperature;
-            double F1VCCINT;
-            double F1VCCAUX;
-            double F1Temperature;
-            double F1VCCINTMAX;
-            double F1VCCAUXMAX;
-            double F1TemperatureMax;
-            double QGFVoltage12;
-            double QGFCurrent12;
-            double QGFVoltage5;
-            double QGFCurrent5;
-            double QGFTemperature0;
-            double QGFTemperature1;
-            double QGFTemperature2;
-            double QGFTemperature3;
-        };
+        
 
         /****************************************************************************
          * Function:    Qworks_Version
@@ -247,6 +284,17 @@ namespace DeviceFunctionDriver
 
 
         /****************************************************************************
+        * Function:    Qworks_GetPort
+        * Description: GetPort
+        * Input:       DevNum: 板卡号
+        * Output:      无
+        * Return:      参考错误列表EnumError
+        * Other:       无
+        ****************************************************************************/
+        [DllImport("QWorks.dll", EntryPoint = "Qworks_GetPort", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetPort(uint DevNum);
+
+        /****************************************************************************
         * Function:    Qworks_SetBoardInfo
         * Description: 
         ****************************************************************************/
@@ -296,13 +344,13 @@ namespace DeviceFunctionDriver
     
          ****************************************************************************/
         [DllImport("QWorks.dll", EntryPoint = "Qworks_SensorInfo", CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SensorInfo(ref S_SensorInfo Info, uint DevNum);
+        public static extern int SensorInfo(ref SensorInfo Info, uint DevNum);
 
 
         /****************************************************************************
          * Function:    Qworks_F1Info
          * Description: 获取FPGA1信息
-         * Input:       Cmd: 获取信息命令 参考EnumF0Info
+         * Input:       Cmd: 获取信息命令 参考EnumF1Info
          *				DevNum: 板卡号
          * Output:      *Info: FPGA0信息
          * Return:      参考错误列表EnumError

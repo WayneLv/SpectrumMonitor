@@ -18,6 +18,6 @@ namespace InstrumentDriverCore.Interfaces
 
         bool ReadSpectrum(ref double[] data, int index = 0);
 
-        bool ReadSignaCharacter(ref List<ISignalCharacters> signalcharacters);
+        bool ReadSignalCharacter(ref List<ISignalCharacters> signalcharacters);
     }
 }

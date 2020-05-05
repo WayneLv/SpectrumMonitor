@@ -80,7 +80,7 @@ namespace InstrumentDriver.SpectrumMonitor
             }
             else
             {
-                RegDriver = new QWorksRegDriver();
+                RegDriver = new QWorksRegDriver(ErrorLog, simulate);
             }
 
             // create the registers for this module.
@@ -354,29 +354,29 @@ namespace InstrumentDriver.SpectrumMonitor
         #region Public methods
         public bool ReadSpectrum(ref double[] data, int index = 0)
         {
-            if (IsSimulated)
+            //if (IsSimulated)
             {
                 data = Utility.SimulateSpectrumData(10000);
 
                 List<ISignalCharacters> sig = new List<ISignalCharacters>();
-                ReadSignaCharacter(ref sig);
+                ReadSignalCharacter(ref sig);
                 return true;
             }
-            else
+            //else //TODO Read Spectrum from Hardware
             {
                 throw new NotImplementedException();
             }
         }
 
 
-        public bool ReadSignaCharacter(ref List<ISignalCharacters> signalcharacters)
+        public bool ReadSignalCharacter(ref List<ISignalCharacters> signalcharacters)
         {
-            if (IsSimulated)
+            //if (IsSimulated)
             {
                 signalcharacters = Utility.SimulateSignalCharacters();
                 return true;
             }
-            else
+            //else //TODO Read SignaCharacter from Hardware
             {
                 throw new NotImplementedException();
             }

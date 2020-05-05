@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpectrumMonitor.Windows"
         xmlns:control="clr-namespace:SpectrumMonitor.Controls"
-        mc:Ignorable="d" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="Level Setting" Height="130" Width="200" Background="Black">
     <Grid Margin="5">
         <Grid.RowDefinitions>

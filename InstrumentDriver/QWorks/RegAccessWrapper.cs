@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InstrumentDriver.Core.Utility;
 
 namespace InstrumentDriver.QWorks
 {
@@ -27,25 +28,66 @@ namespace InstrumentDriver.QWorks
         private static readonly int CONTROL_MODE_BIT = 8; //bit 8
         private static readonly int CONTROL_LENGTH_BIT = 9; //bit 9~13
 
+        private static readonly Dictionary<int,string> mErrorInfoDictionary = new Dictionary<int, string>()
+        {
+            {0,  "Err_Success"},
+            {-1, "Err_Error"},
+            {-2, "Err_DriverOpen"},
+            {-3, "Err_ScanDevices"},
+            {-4, "Err_GetDeviceInfo "},
+            {-5, "Err_DeviceOpen"},
+            {-6, "Err_DmaBufLock"},
+            {-7, "Err_PortNoFunc"},
+            {-8, "Err_Port"},
+            {-9, "Err_Switch"},
+            {-10, "Err_ParaRange"},
+            {-11, "Err_CmdRange"},
+            {-12, "Err_DevNum"},
+            {-13, "Err_Interrupt"},
+            {-14, "Err_BitState"},
+            {-15, "Err_BitF0F1Link"},
+            {-16, "Err_HQNFBusy"},
+            {-17, "Err_HQNFFree"},
+            {-18, "Err_SocketInit"},
+            {-19, "Err_SocketBind"},
+            {-20, "Err_SocketConnect"},
+            {-21, "Err_SocketSend"},
+            {-22, "Err_SocketRecv"},
+            {-23, "Err_Busy"},
+            {-24, "Err_HQNFControl"},
+            {-25, "Err_TimeOut"},
+            {-26, "Err_Mutex"}
+        };
 
-        private static void QWorksRegWrite(uint regdata, uint regnum, uint devnum)
+
+        public static string ErrorInfo(int code)
+        {
+            if (mErrorInfoDictionary.ContainsKey(code))
+                return mErrorInfoDictionary[code];
+            else
+            {
+                return "Unknown error";
+            }
+
+        }
+
+        public static void QWorksRegWrite(uint regdata, uint regnum, uint devnum)
         {
             int status = Qworks.F1WriteReg(regdata, regnum, devnum);
-            if (status <= 0)
+            if (status < 0)
             {
-                throw new Exception(string.Format("Qworks register writing failed, status = {0}" , status));
+                throw new Exception(string.Format("QWorksRegWrite Error: {0}", ErrorInfo(status)));
             }
         }
 
-        private static uint QWorksRegRead(uint regnum, uint devnum)
+        public static uint QWorksRegRead(uint regnum, uint devnum)
         {
             uint readvalue = 0;
             int status = Qworks.F1ReadReg(ref readvalue, regnum, devnum);
-            if (status <= 0)
+            if (status < 0)
             {
-                throw new Exception(string.Format("Qworks register reading failed, status = {0}", status));
+                throw new Exception(string.Format("QWorksRegRead Error: {0}", ErrorInfo(status)));
             }
-
             return readvalue;
         }
 

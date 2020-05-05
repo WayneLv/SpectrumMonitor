@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SpectrumMonitor.ViewModel;
 
 namespace SpectrumMonitor.Windows
 {
@@ -19,9 +20,19 @@ namespace SpectrumMonitor.Windows
     /// </summary>
     public partial class ErrorInfo : Window
     {
-        public ErrorInfo()
+        private SpctrumMonitorViewModel mMainViewModel;
+
+        public ErrorInfo(SpctrumMonitorViewModel mainViewModel)
         {
             InitializeComponent();
+
+            mMainViewModel = mainViewModel;
+            DataContext = mMainViewModel.ErrorMessageViewModel;
+        }
+
+        private void ErrorInfo_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            mMainViewModel.ErrorMessageViewModel.DoRefreshError();
         }
     }
 }

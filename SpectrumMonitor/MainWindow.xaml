@@ -7,7 +7,7 @@
         xmlns:control="clr-namespace:SpectrumMonitor.Controls;assembly="
         xmlns:windows="clr-namespace:SpectrumMonitor.Windows"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterScreen" Closed="MainWindow_OnClosed"
         Title="Spectrum Monitor" MinHeight="740" MinWidth="1280" Background="DarkGray">
     <Grid>
         <!--<control:WindowButton Content="ShowDeviceInfo" UserWindowType ="{x:Type windows:DeviceInfo}" />
@@ -48,10 +48,16 @@
         <ContentControl x:Name="SignalTableArea" Grid.Row="4" Grid.RowSpan="3" Grid.Column="3" Grid.ColumnSpan="2"/>
         <!--<ContentControl x:Name="SettingPanelArea" Grid.Row="4" Grid.RowSpan="3" Grid.Column="6"/>-->
         <ContentControl x:Name="SpectrumArea" Grid.Row="6" Grid.Column="1"/>
-        <control:DisplayWindowLable Content="{Binding Path= LatestMessage, Mode=OneWay}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="4" x:Name="ErrorMessage" HorizontalAlignment="Stretch"
-                                    UserWindowType ="{x:Type windows:ErrorInfo}" />
+
+        <!--<control:DisplayWindowLable Content="{Binding Path= LatestMessage, Mode=OneWay}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="4" x:Name="ErrorMessage" HorizontalAlignment="Stretch"
+                                    UserWindowType ="{x:Type windows:ErrorInfo}" />-->
+
         <TextBlock Grid.Row="2" Grid.Column="4" x:Name="VersionString" VerticalAlignment="Center" HorizontalAlignment="Right">V.0.0</TextBlock>
 
+        <StatusBar Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="4" Height="25" Background="Black" Cursor="Hand" Foreground="Gold" VerticalAlignment="Center"
+                   MouseDoubleClick="Control_OnMouseDoubleClick">
+            <TextBlock Text="{Binding Path=LatestMessage,Mode=OneWay}"/>
+        </StatusBar>
 
     </Grid>
 </Window>

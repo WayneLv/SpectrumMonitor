@@ -6,7 +6,7 @@
         xmlns:view="clr-namespace:SpectrumMonitor.ViewModel"
         xmlns:control="clr-namespace:SpectrumMonitor.Controls"
         xmlns:local="clr-namespace:SpectrumMonitor.Windows"
-        mc:Ignorable="d" Loaded="DisplayLoaded"
+        mc:Ignorable="d" Loaded="DisplayLoaded" WindowStartupLocation="CenterScreen"
         Title="{Binding ListName}" Height="450" Width="800" Background="Gray">
     <Grid>
         <Grid.RowDefinitions>

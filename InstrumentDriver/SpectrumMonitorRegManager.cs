@@ -20,10 +20,10 @@ namespace InstrumentDriver.SpectrumMonitor
         public SpectrumMonitorRegManager(IInstrument module) : base()
         {
             mRecReg = new ReceiverRegisterSet(this, module, "ReceiverReg");
-            mSrcReg = new SourceRegisterSet(this, module, "SourceReg");
-            new ReceiverDspRegisterSet(this, module, "ReceiverDsp");
-            new SourceDspRegisterSet(this, module, "SourceDsp");
-            new SoftwareLatchesRegisterSet(this, module, "SoftwareLatches");
+            //mSrcReg = new SourceRegisterSet(this, module, "SourceReg");
+            //new ReceiverDspRegisterSet(this, module, "ReceiverDsp");
+            //new SourceDspRegisterSet(this, module, "SourceDsp");
+            //new SoftwareLatchesRegisterSet(this, module, "SoftwareLatches");
 
             foreach (var item in GetRegisterSets())
             {

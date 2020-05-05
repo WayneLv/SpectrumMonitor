@@ -1,12 +1,36 @@
-﻿<Window x:Class="SpectrumMonitor.Windows.DeviceInfo"
+﻿<Window x:Class="SpectrumMonitor.Windows.DeviceInfoWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SpectrumMonitor.Windows"
-        mc:Ignorable="d"
-        Title="DeviceInfo" Height="300" Width="300">
+        xmlns:local="clr-namespace:SpectrumMonitor.Windows" WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d" Loaded="DeviceInfo_OnLoaded"
+        Title="DeviceInfo" Height="690" Width="420" SizeToContent="Height"> 
     <Grid>
-        <Label>This is Device Infor Window</Label>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.ColumnSpan="3" HorizontalAlignment="Center" Foreground=" Black" FontSize="22">Device Information</Label>
+        <Button Margin="5" Grid.Row="1" Command="{Binding Path=RefreshDeviceInfo}" Height="21" MinWidth="80" Content="Refresh"/>
+        <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin ="5" BorderBrush="Coral" ItemsSource="{Binding Path=DeviceInfoList}" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" MinWidth="200" Margin="5,2,2,2" ToolTip="Name" />
+                        <TextBlock Text="{Binding Value}" MinWidth="160" Margin="5,2,2,2" ToolTip="Value"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
     </Grid>
 </Window>

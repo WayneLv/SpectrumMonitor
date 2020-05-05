@@ -3,10 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Numerics;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Forms;
 using System.Windows.Input;
+using InstrumentDriver.Core.Common.IO;
+using InstrumentDriver.Core.Utility;
+using InstrumentDriver.SpectrumMonitor;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace SpectrumMonitor.ViewModel
 {
@@ -20,8 +29,19 @@ namespace SpectrumMonitor.ViewModel
         private ObservableCollection<Register> mCurrentGroupRegsiters = new ObservableCollection<Register>();
         private ObservableCollection<BitField> mCurrentBitFields = new ObservableCollection<BitField>();
 
+
+        private const string ADDRESSTYPE_MAPPEDCONTROLREG = "Mapped Control Reg";
+        private const string ADDRESSTYPE_CARRIERREG = "Carrier Reg";
+        private const string ADDRESSTYPE_SPECTRUMDATAMEMORY = "Spectrum Data Memory";
+
+
+        private SpctrumMonitorViewModel mMainViewModel;
+
+        private MyAddressSpace mMyAddressSpace = MyAddressSpace.MappedControlReg;
+
         public RegisterControlViewModel(SpctrumMonitorViewModel mainViewModel)
         {
+            mMainViewModel = mainViewModel;
             mInstr = mainViewModel.Instrument;
 
             var groupstr = mInstr.Service.GetRegisterGroups();
@@ -30,9 +50,18 @@ namespace SpectrumMonitor.ViewModel
             mRegisterGroupItems.Clear();
             mRegisterGroupItems.AddRange(groups);
 
+            AddressType = new List<string>();
+            AddressType.AddRange(new List<string>(){ ADDRESSTYPE_MAPPEDCONTROLREG, ADDRESSTYPE_CARRIERREG, ADDRESSTYPE_SPECTRUMDATAMEMORY });
+
+            mSelectedAddressType = AddressType[0];
+            WriteAddress = "0x00";
+            ReadAddress = "0x00";
+            LengthToRead = "1";
+
+            WriteData = "11,3,44,67,0x78,0x15";
         }
 
-
+        #region Register access
         public List<string> RegisterGroupItems
         {
             get
@@ -295,6 +324,7 @@ namespace SpectrumMonitor.ViewModel
         public void DoRegisterWrite()
         {
             mInstr.Service.WriteRegisterByName(CurrentGroup, CurrentRegister.Name, (Int64)CurrentRegisterValue, true);
+            UpdateErrorMessage();
         }
 
         RelayCommand _RegisterRead;
@@ -307,6 +337,7 @@ namespace SpectrumMonitor.ViewModel
 
             var valueString = mInstr.Service.ReadRegisterByNameAsString(CurrentGroup, CurrentRegister.Name);
             CurrentRegisterValue = ParseRegValue(valueString, CurrentRegister.Size);
+            UpdateErrorMessage();
         }
 
         private BigInteger ParseRegValue(string valueString,int size)
@@ -325,6 +356,592 @@ namespace SpectrumMonitor.ViewModel
             }
         }
 
+        #endregion
+
+        #region Address Access
+        public string WriteAddress
+        {
+            get;
+            set;
+        }
+        public String WriteData
+        {
+            get;
+            set;
+        }
+
+        public string WriteFromFilePath
+        {
+            get;
+            set;
+        }
+
+        private bool mIsWriteFromFile;
+
+        public bool IsWriteFromFile
+        {
+            get
+            {
+                return mIsWriteFromFile;
+            }
+            set
+            {
+                mIsWriteFromFile = value;
+                // Force refresh of visibility
+                NotifyPropertyChanged(() => WriteFromFileVisibility);
+                NotifyPropertyChanged(() => WriteFromPanelVisibility);
+                NotifyPropertyChanged(() => RegWriteFromPanelVisibility);
+                NotifyPropertyChanged(() => MemoryWriteFromPanelVisibility);
+            }
+        }
+
+        private bool mIsAccessRegister = true;
+
+        public bool IsAccessRegister
+        {
+            get
+            {
+                return mIsAccessRegister;
+            }
+            set
+            {
+                mIsAccessRegister = value;
+                // Force refresh of visibility
+                NotifyPropertyChanged(() => WriteFromFileVisibility);
+                NotifyPropertyChanged(() => WriteFromPanelVisibility);
+                NotifyPropertyChanged(() => RegWriteFromPanelVisibility);
+                NotifyPropertyChanged(() => MemoryWriteFromPanelVisibility);
+            }
+        }
+
+        public Visibility WriteFromFileVisibility
+        {
+            get
+            {
+                return IsWriteFromFile ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public Visibility WriteFromPanelVisibility
+        {
+            get
+            {
+                return !IsWriteFromFile ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+        
+
+        public string ReadAddress
+        {
+            get;
+            set;
+        }
+
+        public string LengthToRead
+        {
+            get;
+            set;
+        }
+
+
+        public String ReadData
+        {
+            get;
+            set;
+        }
+
+        public string ReadToFilePath
+        {
+            get;
+            set;
+        }
+
+        private bool mIsReadToFile;
+        private string mSelectedAddressType;
+
+
+        public bool IsReadToFile
+        {
+            get
+            {
+                return mIsReadToFile;
+            }
+            set
+            {
+                mIsReadToFile = value;
+                // Force refresh of visibility
+                NotifyPropertyChanged(() => ReadToFileVisibility);
+                NotifyPropertyChanged(() => ReadToPanelVisibility);
+            }
+        }
+
+        private bool mIsInHex = true;
+
+        public bool IsInHex
+        {
+            get { return mIsInHex; }
+            set { mIsInHex = value; }
+        }
+
+        public Visibility ReadToFileVisibility
+        {
+            get
+            {
+                return IsReadToFile ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+
+        public Visibility ReadVisibility
+        {
+            get
+            {
+                return Visibility.Visible;
+            }
+        }
+
+        public Visibility WriteVisibility
+        {
+            get
+            {
+                return Visibility.Visible;
+            }
+        }
+
+        public Visibility RegWriteFromPanelVisibility
+        {
+            get
+            {
+                return (!IsWriteFromFile && IsAccessRegister) ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public Visibility MemoryWriteFromPanelVisibility
+        {
+            get
+            {
+                return (!IsWriteFromFile && !IsAccessRegister) ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+
+        public Visibility ReadToPanelVisibility
+        {
+            get
+            {
+                return IsReadToFile ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
+        public List<string> AddressType
+        {
+            get;
+            set;
+        }
+
+        public string SelectedAddressType
+        {
+            get { return mSelectedAddressType; }
+            set
+            {
+                // When switching modules, if the previously selected memory block name
+                //  does not exist in the new module, value will be null.  In that case
+                //  default to a safe value
+                mSelectedAddressType = (value != null) ? value : AddressType[0];
+
+                if (mSelectedAddressType == ADDRESSTYPE_MAPPEDCONTROLREG)
+                {
+                    IsAccessRegister = true;
+                    mMyAddressSpace = MyAddressSpace.MappedControlReg;
+                }
+                else if (mSelectedAddressType == ADDRESSTYPE_CARRIERREG)
+                {
+                    IsAccessRegister = true;
+                    mMyAddressSpace = MyAddressSpace.CarrierReg;
+                }
+                else if (mSelectedAddressType == ADDRESSTYPE_SPECTRUMDATAMEMORY)
+                {
+                    IsAccessRegister = false;
+                    mMyAddressSpace = MyAddressSpace.SpectrumDataMemory;
+                }
+                else
+                {
+                    throw new Exception("Unsupported Address Space");
+                }
+
+            }
+        }
+
+        private static string ByteArrayToString(byte[] bytes)
+        {
+            int count = 0;
+            StringBuilder hexStr = new StringBuilder(bytes.Length * 2);
+            foreach (byte theByte in bytes)
+            {
+                hexStr.AppendFormat("{0:x2}", theByte);
+                if (count++ >= 7)
+                {
+                    count = 0;
+                    hexStr.Append("\n");
+                }
+            }
+            return hexStr.ToString().ToUpper();
+        }
+
+        private static string IntArrayToString(int[] values, bool inHex)
+        {
+            int count = 0;
+            StringBuilder stringValue = new StringBuilder();
+            foreach (int value in values)
+            {
+                if (inHex)
+                {
+                    stringValue.AppendFormat("0x{0:x},", value);
+                }
+                else
+                {
+                    stringValue.AppendFormat("{0},", value);
+                }
+                if (count++ >= 7)
+                {
+                    count = 0;
+                    stringValue.Append("\n");
+                }
+            }
+            return stringValue.ToString().ToUpper().Remove(stringValue.Length-1);
+        }
+
+        private static byte[] HexStringToByteArray(string hexString)
+        {
+            // Remove '0x' is present (assume it is leading)
+            hexString = hexString.Replace("0x", "").Replace(" ", "").Replace("\r", "").Replace("\n", "");
+
+            // Truncation is not divisible by 2
+            byte[] hexAsBytes = new byte[hexString.Length / 2];
+
+            for (int i = 0; i < hexAsBytes.Length; i++)
+            {
+                // Pull off the next 2 characters and convert to hex
+                string byteValue = hexString.Substring(i * 2, 2);
+                hexAsBytes[i] = byte.Parse(byteValue, NumberStyles.HexNumber);
+            }
+            return hexAsBytes;
+        }
+
+
+        RelayCommand mWriteBrowse;
+        public ICommand WriteBrowse
+        {
+            get { return mWriteBrowse ?? (mWriteBrowse = new RelayCommand(() => BrowseWriteFromFilePath())); }
+        }
+
+        RelayCommand mReadBrowse;
+        public ICommand ReadBrowse
+        {
+            get { return mReadBrowse ?? (mReadBrowse = new RelayCommand(() => BrowseReadToFilePath())); }
+        }
+
+        RelayCommand mWriteAddressCommand;
+        public ICommand WriteAddressCommand
+        {
+            get { return mWriteAddressCommand ?? (mWriteAddressCommand = new RelayCommand(() => OnWriteAddress())); }
+        }
+
+        RelayCommand mReadAddressCommand;
+
+        public ICommand ReadAddressCommand
+        {
+            get { return mReadAddressCommand ?? (mReadAddressCommand = new RelayCommand(() => OnReadAddress())); }
+        }
+
+
+        private void OnWriteAddress()
+        {
+            try
+            {
+
+                byte[] bWriteData;
+                int[] writeRegVals;
+
+                int writeAddressValue = 0;
+                if (!Utility.ConvertStringInt(WriteAddress, ref writeAddressValue))
+                {
+                    throw new Exception("Invalid address. Enter integer value in decimal <nnn> or hex <0xhhh>");
+                }
+
+                if (IsWriteFromFile)
+                {
+                    bWriteData = File.ReadAllBytes(WriteFromFilePath);
+                    //mDriver.WriteMemory(Model, SelectedMemoryBlock, writeAddressValue, bWriteData);
+                }
+                else
+                {
+
+                    if (IsAccessRegister) // Write Register
+                    {
+                        if (WriteData.Length < 1)
+                        {
+                            throw new Exception("Empty input");
+                        }
+
+                        try
+                        {
+                            string[] regValStrings = WriteData.Split(',');
+                            writeRegVals = new int[regValStrings.Length];
+                            for (int i = 0; i < regValStrings.Length; i++)
+                            {
+                                if (!Utility.ConvertStringInt(regValStrings[i], ref writeRegVals[i]))
+                                {
+                                    throw new Exception("Invalid value string: " + regValStrings[i]);
+                                }
+                            }
+
+                            if (writeRegVals.Length == 1)
+                            {
+                                mInstr.RegDriver.RegWrite((AddressSpace) mMyAddressSpace, writeAddressValue,
+                                    writeRegVals[0]);
+                            }
+                            else
+                            {
+                                mInstr.RegDriver.ArrayWrite((AddressSpace) mMyAddressSpace, writeAddressValue,
+                                    writeRegVals, writeRegVals.Length);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("Writing error:" + ex.Message);
+                        }
+
+                    }
+                    else //Write Memory
+                    {
+                        if (WriteData.Length < 2)
+                        {
+                            throw new Exception("Invalid data. Enter at least 1 byte (2 characters)");
+                        }
+
+                        try
+                        {
+                            bWriteData = HexStringToByteArray(WriteData);
+                        }
+                        catch
+                        {
+                            throw new Exception("Invalid data. Enter data in hex");
+                        }
+
+                        //mDriver.WriteMemory(Model, SelectedMemoryBlock, writeAddressValue, bWriteData);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mMainViewModel.LatestMessage = ex.Message;
+
+            }
+            finally
+            {
+                UpdateErrorMessage();
+            }
+        }
+
+        private void OnReadAddress()
+        {
+            try
+            {
+
+                byte[] dataRead = new byte[0];
+                int[] regRead = new int[1];
+
+                int readAddressValue = 0;
+                if (!Utility.ConvertStringInt(ReadAddress, ref readAddressValue))
+                {
+                    throw new Exception("Invalid read address. Enter integer value in decimal <nnn> or hex <0xhhh>");
+                }
+
+                int byteCount = 0;
+                if (!Utility.ConvertStringInt(LengthToRead, ref byteCount) || byteCount < 0)
+                {
+                    throw new Exception("Invalid 'Number of Bytes' Enter integer value in decimal <nnn> or hex <0xhhh>");
+                }
+
+                //mDriver.ReadMemory(Model, SelectedMemoryBlock, readAddressValue, byteCount, out dataRead);
+                if (IsReadToFile)
+                {
+                    if (dataRead != null && dataRead.Length > 0)
+                    {
+                        FileStream stream = new FileStream(ReadToFilePath,
+                            FileMode.OpenOrCreate,
+                            FileAccess.Write,
+                            FileShare.ReadWrite);
+                        stream.Write(dataRead, 0, dataRead.Length);
+                        stream.Flush();
+                        stream.Close();
+                    }
+                }
+                else
+                {
+                    if (IsAccessRegister)
+                    {
+                        if (byteCount == 1)
+                        {
+                            regRead[0] = mInstr.RegDriver.RegRead((AddressSpace) mMyAddressSpace, readAddressValue);
+                        }
+                        else
+                        {
+                            regRead = new int[byteCount];
+                            regRead = mInstr.RegDriver.ArrayRead32((AddressSpace)mMyAddressSpace, readAddressValue, byteCount);
+                        }
+
+                        ReadData = IntArrayToString(regRead,IsInHex);
+
+                    }
+                    else
+                    {
+                        //TODO, read memory
+                        ReadData = ByteArrayToString(dataRead);
+                    }
+
+
+                    NotifyPropertyChanged(() => ReadData);
+                }
+            }
+            finally
+            {
+                UpdateErrorMessage();
+            }
+        }
+
+        private void BrowseWriteFromFilePath()
+        {
+            try
+            {
+                OpenFileDialog dlg = new OpenFileDialog
+                {
+                    Title = "Write from file path",
+                    InitialDirectory = Path.GetDirectoryName(WriteFromFilePath),
+                    FileName = Path.GetFileName(WriteFromFilePath),
+                    DefaultExt = ".bin",
+                    Filter = "All Files (*.*)|*.*|Bin File (*.bin)|*.bin",
+                    CheckFileExists = true
+                };
+
+                // Show open file dialog box - this dialog checks for an existing document.
+                Nullable<bool> result = dlg.ShowDialog();
+
+                // Process save file dialog box results
+                if (result == true)
+                {
+                    WriteFromFilePath = dlg.FileName;
+                    NotifyPropertyChanged(() => WriteFromFilePath);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                //ErrorReporter.ReportError(ex);
+            }
+        }
+
+        private void BrowseReadToFilePath()
+        {
+            try
+            {
+                OpenFileDialog dlg = new OpenFileDialog
+                {
+                    Title = "Read to file path",
+                    InitialDirectory = Path.GetDirectoryName(ReadToFilePath),
+                    FileName = Path.GetFileName(ReadToFilePath),
+                    DefaultExt = ".bin",
+                    Filter = "All Files (*.*)|*.*|Bin File (*.bin)|*.bin",
+                    CheckFileExists = false
+                };
+
+                // Show open file dialog box - this dialog checks for an existing document.
+                Nullable<bool> result = dlg.ShowDialog();
+
+                // Process save file dialog box results
+                if (result == true)
+                {
+                    ReadToFilePath = dlg.FileName;
+                    NotifyPropertyChanged(() => ReadToFilePath);
+                }
+            }
+
+            catch (Exception ex)
+            {
+                //ErrorReporter.ReportError(ex);
+            }
+        }
+
+        #endregion
+
+        public string LatestMessage
+        {
+            get => mMainViewModel.LatestMessage;
+        }
+
+        public void UpdateErrorMessage(bool firstTime = false)
+        {
+            mMainViewModel.UpdateErrorMessage(firstTime);
+            NotifyPropertyChanged(()=> LatestMessage);
+        }
+        //{
+        //    get => mLatestMessage;
+        //    set
+        //    {
+        //        mLatestMessage = value;
+        //        NotifyPropertyChanged((() => LatestMessage));
+        //    }
+        //}
+
+        //#region ErrorMessage
+
+        //private string mLatestMessage = "---";
+
+        //public string LatestMessage
+        //{
+        //    get => mLatestMessage;
+        //    set
+        //    {
+        //        mLatestMessage = value;
+        //        NotifyPropertyChanged((() => LatestMessage));
+        //    }
+        //}
+
+        //private int mLastErrorConut = 0;
+
+        //public void UpdateErrorMessage(bool firstTime = false)
+        //{
+        //    if (firstTime)
+        //    {
+        //        mLastErrorConut = mInstr.ErrorLog.ErrorList.Count;
+        //        mLatestMessage = "";
+        //    }
+        //    else
+        //    {
+        //        int currentCount = mInstr.ErrorLog.ErrorList.Count;
+        //        if (currentCount == mLastErrorConut)
+        //        {
+        //            LatestMessage = "";
+        //        }
+        //        else
+        //        {
+        //            if (mInstr.ErrorLog.ErrorList.Count > 0)
+        //            {
+        //                LatestMessage = mInstr.ErrorLog.ErrorList.Last().Message;
+        //                mLastErrorConut = currentCount;
+        //            }
+        //            else
+        //            {
+        //                LatestMessage = "";
+        //                mLastErrorConut = 0;
+        //            }
+        //        }
+        //    }
+        //}
+
+
+        //#endregion
     }
 
     public class Register

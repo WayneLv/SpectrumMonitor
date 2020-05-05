@@ -432,7 +432,7 @@ namespace InstrumentDriver.Core.Mock
 
         public void ArrayWrite( AddressSpace bar, int barOffset, int[] data32, int length )
         {
-            throw new NotImplementedException();
+            ArrayWrite(barOffset, data32, length);
         }
 
         public void ArrayWrite( AddressSpace bar, int barOffset, int[] data32, int length, int offset )
@@ -518,7 +518,7 @@ namespace InstrumentDriver.Core.Mock
 
         public int[] ArrayRead32( AddressSpace bar, int barOffset, int num32BitWords )
         {
-            throw new NotImplementedException();
+            return ArrayRead32(barOffset, num32BitWords);
         }
 
         public void ReadFifo( AddressSpace bar, int barOffset, int length, int[] data, int offset )

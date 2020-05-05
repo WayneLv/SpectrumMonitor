@@ -4,9 +4,54 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SpectrumMonitor.Windows"
-        mc:Ignorable="d"
-        Title="ErrorInfo" Height="300" Width="300">
+        xmlns:view="clr-namespace:SpectrumMonitor.ViewModel"
+        mc:Ignorable="d" Loaded="ErrorInfo_OnLoaded" WindowStartupLocation="CenterScreen"
+        Title="ErrorInfo" Height="480" Width="800" >
+    <Window.Resources>
+        <view:MessageEnumToString x:Key="MessageEnumToString"></view:MessageEnumToString>
+        <view:MessageEnumToColor x:Key="MessageEnumToColor"></view:MessageEnumToColor>
+    </Window.Resources>
     <Grid>
-        <Label>This is Error Info Window</Label>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="400" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Button Margin="0,0,5,0" Grid.Row="1" Command="{Binding Path=RefreshError}" MinWidth="80" Content="Refresh"/>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" >
+            <Label Foreground="Black" VerticalAlignment="Center" Margin="2" >Message Type:</Label>
+            <ComboBox Margin="5" MinWidth ="100" ItemsSource="{Binding Path=MessageTypes}" 
+                      SelectedItem="{Binding Path=SelectedMessageType}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBox Style="{x:Null}" Text="{Binding ErrorFilePath}" VerticalAlignment="Center" MinWidth="320" Margin="2"/>
+            <Button Margin="0,0,5,0" Command="{Binding Path=BrowseErrorFile}" MinWidth="10" Content="..."/>
+            <Button Margin="0,0,5,0" Command="{Binding Path=DumpError}" MinWidth="80" Content="Dump"/>
+            <Button Margin="0,0,5,0" Command="{Binding Path=ClearError}" MinWidth="80" Content="Clear"/>
+        </StackPanel>
+
+        <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding Path=DisplayLogMessageList}" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding DateString}" MinWidth="100" Margin="5,2,2,2" Foreground="{Binding Path=Type,Converter={StaticResource MessageEnumToColor}}" ToolTip="Time" />
+                        <TextBlock Text="{Binding Path=Type,Converter={StaticResource MessageEnumToString}}" MinWidth="50" Margin="5,2,2,2" Foreground="{Binding Path=Type,Converter={StaticResource MessageEnumToColor}}" ToolTip="Type"/>
+                        <!--<TextBlock Text="{Binding Code}" MinWidth="40" Margin="5,2,2,2" Foreground="{Binding Path=Type,Converter={StaticResource MessageEnumToColor}}" ToolTip="Message Code"/>-->
+                        <TextBlock Text="{Binding Message}" MinWidth="180" Margin="5,2,2,2" Foreground="{Binding Path=Type,Converter={StaticResource MessageEnumToColor}}" ToolTip="Message"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
     </Grid>
 </Window>

@@ -4,6 +4,7 @@ using InstrumentDriver.SpectrumMonitor;
 using SpectrumMonitor.Controls;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -22,11 +23,13 @@ namespace SpectrumMonitor.ViewModel
         private readonly SpectrogramAreaViewModel mSpectrogramAreaViewModel;
         private readonly SpectrumAreaViewModel mSpectrumAreaViewModel;
         private readonly SignalTableAreaViewModel mSignalTableAreaViewModel;
+        private readonly ErrorMessageViewModel mErrorMessageViewModel;
+        private readonly DeviceInfoViewModel mDeviceInfoViewModel;
 
 
         internal SpctrumMonitorViewModel()
         {
-            mInstr = new SpectrumMonitorInstrument(true);
+            mInstr = new SpectrumMonitorInstrument(Configuration.Simulation);
 
             mRegisterControlViewModel = new RegisterControlViewModel(this);
             mIndicatorViewModel = new IndicatorViewModel(this);
@@ -36,6 +39,8 @@ namespace SpectrumMonitor.ViewModel
             mSpectrumAreaViewModel = new SpectrumAreaViewModel(this);
             mSpectrogramAreaViewModel = new SpectrogramAreaViewModel(this);
             mSignalTableAreaViewModel = new ViewModel.SignalTableAreaViewModel(this);
+            mErrorMessageViewModel = new ErrorMessageViewModel(this);
+            mDeviceInfoViewModel = new DeviceInfoViewModel(this);
         }
 
         #region Private
@@ -64,20 +69,53 @@ namespace SpectrumMonitor.ViewModel
         public SignalTableAreaControl SignalTableAreaControl { get; set; }
         #endregion
 
-        #region NotifyProperty
-        private string mLatestMessage = " No Error";
+        #region ErrorMessage
+
+        private string mLatestMessage = "";
+
         public string LatestMessage
         {
+            get => mLatestMessage;
             set
             {
                 mLatestMessage = value;
-                NotifyPropertyChanged(() => LatestMessage);
-            }
-            get
-            {
-                return mLatestMessage;
+                NotifyPropertyChanged((() => LatestMessage));
             }
         }
+
+        private int mLastErrorConut = 0;
+
+        public void UpdateErrorMessage(bool firstTime = false)
+        {
+            if (firstTime)
+            {
+                mLastErrorConut = mInstr.ErrorLog.ErrorList.Count;
+                mLatestMessage = "";
+            }
+            else
+            {
+                int currentCount = mInstr.ErrorLog.ErrorList.Count;
+                if (currentCount == mLastErrorConut)
+                {
+                    LatestMessage = "";
+                }
+                else
+                {
+                    if (mInstr.ErrorLog.ErrorList.Count > 0)
+                    {
+                        LatestMessage = mInstr.ErrorLog.ErrorList.Last().Message;
+                        mLastErrorConut = currentCount;
+                    }
+                    else
+                    {
+                        LatestMessage = "";
+                        mLastErrorConut = 0;
+                    }
+                }
+            }
+        }
+
+
         #endregion
 
 
@@ -127,10 +165,19 @@ namespace SpectrumMonitor.ViewModel
         {
             get { return mSignalTableAreaViewModel; }
         }
+
+        internal ErrorMessageViewModel ErrorMessageViewModel
+        {
+            get { return mErrorMessageViewModel; }
+        }
+
+        internal DeviceInfoViewModel DeviceInfoViewModel => mDeviceInfoViewModel;
         #endregion
 
         public Boolean? PowerState { get; set; } = true;
         public Boolean? ErrorState { get; set; } = false;
+
+
     }
 
     

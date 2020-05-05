@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml;
 using SpectrumMonitor.Windows;
 
 namespace SpectrumMonitor
@@ -17,17 +18,27 @@ namespace SpectrumMonitor
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            Configuration.Initialize();
 
-            ////Test code -- Start
-            //RegisterControl regWindow = new RegisterControl(null);
-            //regWindow.ShowDialog();
-            //this.Shutdown();
-            ////Test code -- End
+            if (Configuration.MainUI == Configuration.MAINUI_REGCONTROL)
+            {
+                RegisterControl regWindow = new RegisterControl(null);
+                regWindow.ShowDialog();
+                regWindow.Close();
+                this.Shutdown();
+            }
+
+            if (Configuration.MainUI == Configuration.MAINUI_ADDRESSACCESS)
+            {
+                AddressAccessWindow addrWindow = new AddressAccessWindow(null);
+                addrWindow.ShowDialog();
+                this.Shutdown();
+            }
 
             MainWindow mainwin = new MainWindow();
             Login loginwindow = new Login();
 
-            if (SpectrumMonitor.Properties.Resources.NeedLogIn == "TRUE1")
+            if (Configuration.NeedLogin)
             {
                 loginwindow.ShowDialog();
                 if (!loginwindow.DialogResult.GetValueOrDefault())
@@ -39,6 +50,11 @@ namespace SpectrumMonitor
 
             mainwin.ShowDialog();
         }
+
+
     }
+
+
+
 
 }

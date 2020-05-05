@@ -41,7 +41,7 @@ namespace DeviceFunctionDriver
      
         public override string GetErrorInfo()
         {
-            throw new NotImplementedException();
+            return "Simulaton -- No Error";
         }
 
 

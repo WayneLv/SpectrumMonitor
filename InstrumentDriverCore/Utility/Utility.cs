@@ -2,6 +2,7 @@
 using InstrumentDriverCore.Mock;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -301,6 +302,84 @@ namespace InstrumentDriver.Core.Utility
             return clipvalue * power;
         }
 
+
+        public static int ParseInt(string numberStr)
+        {
+            int parsedInt = 0;
+
+            bool status = ConvertStringInt(numberStr, ref parsedInt);
+            if (status == false)
+            {
+                throw new Exception("Invalid address or data.  Enter integer value in decimal <nnn> or hex <0xnnn>");
+            }
+            return parsedInt;
+        }
+
+        public static bool ConvertStringInt(string numberStr, ref int numberValue)
+        {
+            bool status = true;
+            {
+                try
+                {
+                    numberStr = numberStr.Trim().ToUpperInvariant();
+                    if (numberStr.Length > 0)
+                    {
+                        // Try to parse as decimal
+                        if (numberStr.StartsWith("0X"))
+                        {
+                            numberStr = numberStr.Substring(2);
+                            // Parse as hex string
+                            numberValue = Int32.Parse(numberStr, NumberStyles.HexNumber);
+                        }
+                        else
+                        {
+                            // Parse as decimal string
+                            // This may throw an exception, if not a value number.
+                            // Will be caught as displayed as user error
+                            numberValue = Int32.Parse(numberStr);
+                        }
+                    }
+                }
+                catch
+                {
+                    status = false;
+                }
+            }
+            return status;
+        }
+
+        public static bool ConvertStringLong(string numberStr, ref long numberValue)
+        {
+            bool status = true;
+            {
+                try
+                {
+                    numberStr = numberStr.Trim().ToUpperInvariant();
+                    if (numberStr.Length > 0)
+                    {
+                        // Try to parse as decimal
+                        if (numberStr.StartsWith("0X"))
+                        {
+                            numberStr = numberStr.Substring(2);
+                            // Parse as hex string
+                            numberValue = Int64.Parse(numberStr, NumberStyles.HexNumber);
+                        }
+                        else
+                        {
+                            // Parse as decimal string
+                            // This may throw an exception, if not a value number.
+                            // Will be caught as displayed as user error
+                            numberValue = Int64.Parse(numberStr);
+                        }
+                    }
+                }
+                catch
+                {
+                    status = false;
+                }
+            }
+            return status;
+        }
 
     }
 }

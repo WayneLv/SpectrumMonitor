@@ -320,7 +320,7 @@ namespace InstrumentDriver.Core.Register
         /// <param name="args">arbitrary array of objects for use by the delegate ... normally
         /// used to specify register-type specific arguments</param>
         /// <returns>a reference to the register Treg created.</returns>
-        public static IRegister ConstructNonMemoryMappedReg( string name,
+        public static IRegister ConstructNonMemoryMappedControlReg( string name,
                                                              RegDef regDef,
                                                              IRegDriver driver,
                                                              int baseAddr,

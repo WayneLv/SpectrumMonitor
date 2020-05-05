@@ -37,7 +37,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -81,6 +81,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Configuration.cs" />
     <Compile Include="Controls\DisplayWindowLable.xaml.cs">
       <DependentUpon>DisplayWindowLable.xaml</DependentUpon>
     </Compile>
@@ -115,6 +116,8 @@
     <Compile Include="Controls\WindowButton.cs" />
     <Compile Include="ViewModel\AbstractModel.cs" />
     <Compile Include="ViewModel\Command.cs" />
+    <Compile Include="ViewModel\DeviceInfoViewModel.cs" />
+    <Compile Include="ViewModel\ErrorMessageViewModel.cs" />
     <Compile Include="ViewModel\FunctionViewModel.cs" />
     <Compile Include="ViewModel\IndicatorViewModel.cs" />
     <Compile Include="ViewModel\GridViewSort.cs" />
@@ -128,6 +131,9 @@
     <Compile Include="ViewModel\SpctrumMonitorViewModel.cs" />
     <Compile Include="ViewModel\SpectrogramAreaViewModel.cs" />
     <Compile Include="ViewModel\SpectrumAreaViewModel.cs" />
+    <Compile Include="Windows\AddressAccessWindow.xaml.cs">
+      <DependentUpon>AddressAccessWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DeviceInfo.xaml.cs">
       <DependentUpon>DeviceInfo.xaml</DependentUpon>
     </Compile>
@@ -213,6 +219,10 @@
     <Page Include="Themes\Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\AddressAccessWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\DeviceInfo.xaml">
       <SubType>Designer</SubType>
@@ -316,6 +326,12 @@
   <ItemGroup>
     <Resource Include="Images\Down.png" />
     <Resource Include="Images\Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\DeviceInfo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

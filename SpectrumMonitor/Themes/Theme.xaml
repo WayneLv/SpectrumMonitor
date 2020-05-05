@@ -44,7 +44,7 @@
     <SolidColorBrush x:Key="LightBrush" Color="#FF333333" />
     <SolidColorBrush x:Key="MediumBrush" Color="Gray" />
     <SolidColorBrush x:Key="ShadeBrush" Color="#FF434343" />
-
+    
     <Color x:Key="TopGradientSelectColor">#FFFFFFFF</Color>
     <Color x:Key="BottomGradientSelectColor">#FF737373</Color>
 
