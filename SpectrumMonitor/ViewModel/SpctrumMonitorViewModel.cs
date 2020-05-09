@@ -29,7 +29,7 @@ namespace SpectrumMonitor.ViewModel
 
         internal SpctrumMonitorViewModel()
         {
-            mInstr = new SpectrumMonitorInstrument(Configuration.Simulation);
+            mInstr = new SpectrumMonitorInstrument(Configuration.Simulation,Configuration.DriverOption);
 
             mRegisterControlViewModel = new RegisterControlViewModel(this);
             mIndicatorViewModel = new IndicatorViewModel(this);

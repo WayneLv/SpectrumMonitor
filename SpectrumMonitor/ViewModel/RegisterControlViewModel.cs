@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using InstrumentDriver.Core.Common.IO;
 using InstrumentDriver.Core.Utility;
+using InstrumentDriver.Core.Utility.Log;
 using InstrumentDriver.SpectrumMonitor;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -338,6 +339,19 @@ namespace SpectrumMonitor.ViewModel
             var valueString = mInstr.Service.ReadRegisterByNameAsString(CurrentGroup, CurrentRegister.Name);
             CurrentRegisterValue = ParseRegValue(valueString, CurrentRegister.Size);
             UpdateErrorMessage();
+        }
+
+        RelayCommand mDumpLogCommand;
+        public ICommand DumpLog
+        {
+            get { return mDumpLogCommand ?? (mDumpLogCommand = new RelayCommand(() => DoDumpLog())); }
+        }
+        public void DoDumpLog()
+        {
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string path = Path.Combine(folder, "Log Info ");
+            LogManager.RootLogger.Flush(path);
+            LatestMessage = String.Format("Log information dumped to {0}", folder);
         }
 
         private BigInteger ParseRegValue(string valueString,int size)
@@ -878,6 +892,11 @@ namespace SpectrumMonitor.ViewModel
         public string LatestMessage
         {
             get => mMainViewModel.LatestMessage;
+            set
+            {
+                mMainViewModel.LatestMessage = value;
+                NotifyPropertyChanged(() => LatestMessage);
+            }
         }
 
         public void UpdateErrorMessage(bool firstTime = false)

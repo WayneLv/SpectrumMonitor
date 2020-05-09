@@ -51,48 +51,52 @@ namespace InstrumentDriver.SpectrumMonitor
         {
             uint version = 0;
             Qworks.Version(ref version);
-            mErrorLog.AddInformation(string.Format("Qworks Version = {0}", version));
+            mErrorLog.AddInformation(string.Format("Qworks version = {0}", version));
 
             uint devnum = 0;
             int status = Qworks.Initialize(ref devnum);
-            mErrorLog.AddInformation(string.Format("Initialize, Status = {0}", status));
-            mErrorLog.AddInformation(string.Format("Initialize DevSum = {0}", devnum));
+            mErrorLog.AddInformation(string.Format("Initialize, status = {0}", status));
+            mErrorLog.AddInformation(string.Format("Initialize devsum = {0}", devnum));
             if (devnum < 1)
             {
                 mErrorLog.AddError("Qworks initialize error");
             }
-
-            //Convert devum to device ID, the device ID should be the bit position
-            //Now we just support on board, the devnum should be 1 and device ID bit is bit 0;
-            if (devnum > 1)
-            {
-                mErrorLog.AddError("More than one board is detected, does not support now");
-            }
-            else //devnum = 1, bit 0 for device ID
-            {
-                mDeviceID = 0;
-            }
-
-            int port = Qworks.GetPort(mDeviceID);
-            mErrorLog.AddInformation(string.Format("GetPort = {0}", port));
-            if ( port < 1 || port > 10)
-            {
-                mErrorLog.AddError(string.Format("Unknown board type, port = {0}",port));
-            }
             else
             {
-                mBoardName = mBoardNameDictionary[port];
-            }
-            if (port != 5)
-            {
-                //Now we just support QGF_V7_CPCIe
-                mErrorLog.AddError(string.Format("Unsupported board type, BoardName = {0}", mBoardName));
-            }
-            else
-            {
-                mErrorLog.AddInformation(string.Format("Board detected:{0}", mBoardName));
-            }
+                //Convert devum to device ID, the device ID should be the bit position
+                uint devcnt = 0;
+                do
+                {
+                    if ((devnum & 0x01) == 1)//Get a board 
+                    {
+                        int port = Qworks.GetPort(devcnt);
+                        mErrorLog.AddInformation(string.Format("Device number {0}, port = {1}", devcnt, port));
+                        if (mBoardNameDictionary.ContainsKey(port))
+                        {
+                            mBoardName = mBoardNameDictionary[port];
+                        }
+                        else
+                        {
+                            mBoardName = "Unknown";
+                        }
 
+                        if (port != 5)
+                        {
+                            //Now we just support QGF_V7_CPCIe
+                            mErrorLog.AddInformation(string.Format("Device number {0} is a {1} board", devcnt, mBoardName));
+                        }
+                        else
+                        {
+                            mErrorLog.AddInformation(string.Format("{0} carrier board detected, device number = {1}", mBoardName, devcnt));
+                            mDeviceID = devcnt;
+                        }
+                    }
+
+                    devcnt++;
+                    devnum = devnum >> 1;
+                } while (devnum != 0);
+
+            }
         }
 
         public ISession ActiveSession

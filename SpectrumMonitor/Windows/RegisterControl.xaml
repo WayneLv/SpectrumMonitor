@@ -32,9 +32,12 @@
         <TextBlock  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Text="Register Control" FontSize="30" Margin="10"/>
         <TextBlock  Grid.Row="1" Grid.Column="0"  HorizontalAlignment="Right" Text="Register Group:  " Margin="3"/>
         <ComboBox Grid.Row="1" Grid.Column="1"  Name="mRegisterGroupComboBox" ItemsSource="{Binding Path=RegisterGroupItems}" SelectedIndex = "{Binding Path=RegisterGroupIndex, Mode=TwoWay}"/>
-        
-        <Button Grid.Row="1" Grid.Column="2" Width="120" HorizontalAlignment="Right" Click="AddressAccess_Click" Background="DarkOrange">Address Access</Button>
-        
+
+        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Width="120"  Click="AddressAccess_Click" Background="DarkOrange">Address Access</Button>
+            <Button Width="120"  Command="{Binding Path=DumpLog}" Background="DarkOrange">Dump Log</Button>
+        </StackPanel>
+
         <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"/>
         <ListBox Grid.Row="3" Grid.Column="0" Grid.RowSpan="3"  Background="AliceBlue" ItemsSource="{Binding Path=CurrentGroupRegsiters}" SelectedIndex="{Binding Path=RegisterIndex, Mode=TwoWay}">
             <ListBox.ItemTemplate>

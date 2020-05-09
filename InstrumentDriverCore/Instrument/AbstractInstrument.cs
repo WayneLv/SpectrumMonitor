@@ -15,9 +15,11 @@ using InstrumentDriver.Core.Settings;
 using System.Text;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Text.RegularExpressions;
 using InstrumentDriver.Core.Common.IO;
 using InstrumentDriver.Core.Mock;
+using InstrumentDriver.Core.Utility.Log.Appenders;
 
 namespace InstrumentDriver.Core
 {
@@ -28,6 +30,7 @@ namespace InstrumentDriver.Core
         #region private fields
         private IRegDriver[] mRegDrivers;
         private IRegManager mRegManager;
+        private Dictionary<string, string> mOptionMap;
 
 
         #endregion private fields
@@ -41,8 +44,50 @@ namespace InstrumentDriver.Core
 
             ErrorLog = new ErrorLog("Default");
 
-            
+            mOptionMap = options;
 
+            string value = "";
+            var mLogger = LogManager.RootLogger;
+
+            if (FindDriverOption(Support.LOG_LEVEL_KEY, ref value))
+            {
+                var logLevel = LogLevel.Off;
+                if (Enum.TryParse<LogLevel>(value, out logLevel))
+                {
+                    mLogger.LoggingLevel = logLevel;
+                }
+            }
+            if (FindDriverOption(Support.LOG_ENABLED_KEY,ref value))
+            {
+                if(!Support.ParseBoolean(value))
+                {
+                    mLogger.LoggingLevel = LogLevel.Off;
+                }
+            }
+
+            if (FindDriverOption(Support.UDP_APPENDER_KEY, ref value))
+            {
+                if (Support.ParseBoolean(value))
+                {
+                    // NOTE: since LogManager uses static collections, we may already have UdpAppender.
+                    IAppender appender;
+                    if (!LogManager.TryFindAppender("UdpAppender", out appender))
+                    {
+                        //const string configuration =
+                        string configuration = string.Format(
+                            "Appender;Name=UdpAppender;Class=InstrumentDriver.Core.Utility.Log.Appenders.UdpAppender;Layout=root-appender-reglayout;{0}\n",
+                            mOptionMap.ContainsKey(Support.UDP_APPENDER_OPTIONS_KEY)
+                                ? mOptionMap[Support.UDP_APPENDER_OPTIONS_KEY]
+                                : string.Empty);
+                        LoggerFactory.CreateLoggers(new StringReader(configuration));
+                        if (LogManager.TryFindAppender("UdpAppender", out appender))
+                        {
+                            mLogger.AddAppender(appender);
+                        }
+                    }
+
+                }
+            }
         }
         #endregion constructor
 
@@ -177,6 +222,19 @@ namespace InstrumentDriver.Core
         {
             Code = 0;
             Message = "Selftest passed.";
+        }
+
+        public virtual bool FindDriverOption(string name, ref string value)
+        {
+            if (mOptionMap == null || mOptionMap.Count == 0 || !mOptionMap.ContainsKey(name))
+            {
+                return false;
+            }
+            else
+            {
+                value = mOptionMap[name];
+                return true;
+            }
         }
 
 
@@ -421,6 +479,8 @@ namespace InstrumentDriver.Core
                 // TODO: set large fields to null.
 
                 disposedValue = true;
+
+                LogManager.RootLogger.Close();
             }
         }
 

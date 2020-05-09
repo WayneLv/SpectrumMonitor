@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using InstrumentDriver.Core.Utility;
+using InstrumentDriver.Core.Utility.Log;
 
 namespace InstrumentDriver.QWorks
 {
@@ -22,8 +23,8 @@ namespace InstrumentDriver.QWorks
         private static readonly uint STATUS_ADDR = 1;
         private static readonly uint STARTOFFSET_ADDR = 2;
 
-        private static readonly int CONTROL_MODE_WRITE = 1;
-        private static readonly int CONTROL_MODE_READ = 0;
+        private static readonly int CONTROL_MODE_WRITE = 0;
+        private static readonly int CONTROL_MODE_READ = 1;
         private static readonly int CONTROL_REFRESH_BIT = 7; //bit 7
         private static readonly int CONTROL_MODE_BIT = 8; //bit 8
         private static readonly int CONTROL_LENGTH_BIT = 9; //bit 9~13
@@ -73,21 +74,35 @@ namespace InstrumentDriver.QWorks
 
         public static void QWorksRegWrite(uint regdata, uint regnum, uint devnum)
         {
+            
             int status = Qworks.F1WriteReg(regdata, regnum, devnum);
+            if (LogManager.RootLogger.LoggingLevel == LogLevel.Fine)
+            {
+                LogManager.RootLogger.LogAppend(new LoggingEvent(LogLevel.Fine, string.Format("F1WriteReg:devnum = {0},regNum = {1},regData = {2},status={3}", devnum, regnum, regdata, ErrorInfo(status))));
+            }
             if (status < 0)
             {
                 throw new Exception(string.Format("QWorksRegWrite Error: {0}", ErrorInfo(status)));
             }
+
+
         }
 
         public static uint QWorksRegRead(uint regnum, uint devnum)
         {
             uint readvalue = 0;
             int status = Qworks.F1ReadReg(ref readvalue, regnum, devnum);
+
+            if (LogManager.RootLogger.LoggingLevel == LogLevel.Fine)
+            {
+                LogManager.RootLogger.LogAppend(new LoggingEvent(LogLevel.Fine, string.Format("F1ReadReg:devnum = {0},regNum = {1},readvalue = {2},status={3}", devnum, regnum, readvalue, ErrorInfo(status))));
+            }
+
             if (status < 0)
             {
                 throw new Exception(string.Format("QWorksRegRead Error: {0}", ErrorInfo(status)));
             }
+
             return readvalue;
         }
 
