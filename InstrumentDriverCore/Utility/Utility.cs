@@ -2,8 +2,11 @@
 using InstrumentDriverCore.Mock;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -381,5 +384,74 @@ namespace InstrumentDriver.Core.Utility
             return status;
         }
 
+
+        public static DataTable CreateDataTable(string excelFileName, string sheetName)
+        {
+            DataTable dt = new DataTable();
+            try
+            {
+                //For ".xlsx" excel file.
+                using (OleDbConnection oleDbConnection = new OleDbConnection(
+                    "provider=Microsoft.ACE.OLEDB.12.0; Data Source='" +
+                    excelFileName +
+                    "'" +
+                    "; Extended Properties='Excel 12.0;HDR=YES;IMEX=1;'"))
+                {
+                    OleDbDataAdapter oleDbAdapter =
+                        new OleDbDataAdapter("select * from [" + sheetName + "]", oleDbConnection);
+                    oleDbAdapter.Fill(dt);
+                }
+
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(string.Format("CreateDataTable Function error for : {0}", ex.Message));
+            }
+        }
+
+
+        //Return DXP 2-D array, first D is frequency, second D is power, value indicates the occur times
+        public static int[,] GetDPXDataFromExcelFile(string excelFileName, string sheetName = "Sheet1$",
+            int startLevel = -1, int stopLevel = -1)
+        {
+            var dt = CreateDataTable(excelFileName, sheetName);
+            int rownum = dt.Rows.Count;
+            int colnum = dt.Columns.Count;
+
+            if (startLevel < 0)
+            {
+                startLevel = 0;
+            }
+            if (stopLevel < 0)
+            {
+                stopLevel = colnum;
+            }
+
+            if (startLevel > colnum -10)
+            {
+                startLevel = colnum - 10;
+            }
+            if(stopLevel < startLevel + 10)
+            {
+                stopLevel = startLevel + 10;
+            }
+            if (stopLevel > colnum)
+            {
+                stopLevel = colnum;
+            }
+
+            int[,] dpx = new int[rownum, stopLevel- startLevel];
+            for (int i = 0; i < rownum; i++)
+            {
+                for (int j = startLevel; j < stopLevel; j++)
+                {
+                    dpx[i,j- startLevel] = Convert.ToInt32(dt.Rows[i].ItemArray[j]);
+                }
+            }
+            return dpx;
+        }
     }
+
+
 }

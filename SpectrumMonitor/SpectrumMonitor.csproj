@@ -85,6 +85,9 @@
     <Compile Include="Controls\DisplayWindowLable.xaml.cs">
       <DependentUpon>DisplayWindowLable.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DPXDisplayControl.xaml.cs">
+      <DependentUpon>DPXDisplayControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FunctionAreaControl.xaml.cs">
       <DependentUpon>FunctionAreaControl.xaml</DependentUpon>
     </Compile>
@@ -117,6 +120,7 @@
     <Compile Include="ViewModel\AbstractModel.cs" />
     <Compile Include="ViewModel\Command.cs" />
     <Compile Include="ViewModel\DeviceInfoViewModel.cs" />
+    <Compile Include="ViewModel\DpxDisplayViewModel.cs" />
     <Compile Include="ViewModel\ErrorMessageViewModel.cs" />
     <Compile Include="ViewModel\FunctionViewModel.cs" />
     <Compile Include="ViewModel\IndicatorViewModel.cs" />
@@ -165,6 +169,10 @@
       <DependentUpon>MaskDataSetting.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\DisplayWindowLable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DPXDisplayControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -383,8 +383,25 @@ namespace InstrumentDriver.SpectrumMonitor
         }
 
 
+        public bool ReadDpxData(out int[,] dpxData)
+        {
+            //if (IsSimulated)
+            {
+                string[] simFileNames = new[] {"dec.xlsx", "avg.xlsx", "max.xlsx", "min.xlsx"};
+
+                Random rd = new Random();
+                int index = rd.Next(simFileNames.Length);
+                dpxData = Utility.GetDPXDataFromExcelFile(@"C:\My Data\Data\Sensor\data\DPX4096_200\" + simFileNames[index],startLevel:30,stopLevel:80);
+                return true;
+            }
+            //else //TODO Read SignaCharacter from Hardware
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         #endregion
 
-        
+
     }
 }

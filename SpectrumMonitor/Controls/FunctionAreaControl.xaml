@@ -79,6 +79,10 @@
                     </StackPanel>
                 </Button>
 
+                <CheckBox Margin="30,5,5,0" IsChecked="{Binding DPXDisplay}">
+                    DPX Display
+                </CheckBox>
+
             </DockPanel>
         </Grid>
 

@@ -25,6 +25,12 @@ namespace SpectrumMonitor.ViewModel
             mInstr = viewmodel.Instrument;
         }
 
+        public bool DPXDisplay
+        {
+            get { return mMainViewModel.DpxDisplayEnalbed; }
+            set { mMainViewModel.DpxDisplayEnalbed = value; }
+        }
+
         private bool mIsBlink = true;
         public bool IsBlink
         {
@@ -100,6 +106,8 @@ namespace SpectrumMonitor.ViewModel
             Task.Factory.StartNew(delegate { ContinuousSpecSweep(); });
 
             Task.Factory.StartNew(delegate { SignalCharactersUpdate(); });
+
+            Task.Factory.StartNew(delegate { DpxDisplayUpdate(); });
         }
 
         RelayCommand mShowRegisterWindow;
@@ -175,11 +183,15 @@ namespace SpectrumMonitor.ViewModel
 
             CancellationToken ct = mCts.Token;
 
-            mUpdateSpectrumDisplayTask = Task.Factory.StartNew(() =>
+            if (!mMainViewModel.DpxDisplayEnalbed)
             {
-                ViewDispatcher.Dispatcher.Invoke(new Action(mMainViewModel.SpectrumAreaControl.UpdateOnNewData));
-            }, ct);
-
+                mUpdateSpectrumDisplayTask = Task.Factory.StartNew(
+                    () =>
+                    {
+                        ViewDispatcher.Dispatcher.Invoke(new Action(mMainViewModel.SpectrumAreaControl
+                            .UpdateOnNewData));
+                    }, ct);
+            }
 
             if (!mMainViewModel.SpectrogramAreaControl.IsUpdatingDisplay)
             {
@@ -216,6 +228,25 @@ namespace SpectrumMonitor.ViewModel
             }
         }
 
+        private void DpxDisplayUpdate()
+        {
+            int[,] dpxdata;
+            while (mIsMornitoring)
+            {
+                if (mMainViewModel.DpxDisplayEnalbed)
+                {
+                    ((SpectrumMonitorInstrument) mInstr).ReadDpxData(out dpxdata);
 
+                    mMainViewModel.DpxDisplayViewModel.UpdateData(dpxdata);
+
+                    if (!mMainViewModel.DPXDisplayControl.IsUpdatingDisplay)
+                    {
+                        ViewDispatcher.Dispatcher.Invoke(new Action(mMainViewModel.DPXDisplayControl.UpdateOnNewData));
+                    }
+                }
+
+                System.Threading.Thread.Sleep(100);
+            }
+        }
     }
 }

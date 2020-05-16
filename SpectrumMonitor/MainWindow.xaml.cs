@@ -39,7 +39,10 @@ namespace SpectrumMonitor
             FunctionArea.Content = new FunctionAreaControl(mSpctrumMonitorViewModel);
             IndicatorArea.Content = new IndicatorAreaControl(mSpctrumMonitorViewModel);
             SignalTableArea.Content = new SignalTableAreaControl(mSpctrumMonitorViewModel);
+
             SpectrumArea.Content = new SpectrumAreaControl(mSpctrumMonitorViewModel);
+            DpxDisplayArea.Content = new DPXDisplayControl(mSpctrumMonitorViewModel);
+            
             SpectrogramArea.Content = new SpectrogramAreaControl(mSpctrumMonitorViewModel);
 
         }

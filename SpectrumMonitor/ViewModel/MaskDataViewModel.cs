@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using SpectrumMonitor.Windows;
@@ -28,6 +29,7 @@ namespace SpectrumMonitor.ViewModel
         private string mListName= string.Empty;
         private double[] mRefWaveform;
 
+
         public MaskDataListViewModel(string listName)
         {
             mListName = listName;
@@ -49,6 +51,18 @@ namespace SpectrumMonitor.ViewModel
         public string XLable { get; set; } = "Frequency";
         public string YLable { get; set; } = "Power";
 
+        public double TopLevel { get; set; } = 0.0;
+        public double BottomLevel { get; set; } = -100.0;
+
+        public double XStart { get; set; } = 100.0e6;
+        public double XStop { get; set; } = 3000.0e6;
+
+        public double Center
+        {
+            get { return (XStart + XStop) / 2; }
+        }
+
+        
 
         RelayCommand mAddOnePoint;
         public ICommand AddOnePoint
@@ -102,8 +116,9 @@ namespace SpectrumMonitor.ViewModel
             return new double[points];
         }
 
+        public double[] RefWaveform => mRefWaveform;
 
 
-        
+
     }
 }

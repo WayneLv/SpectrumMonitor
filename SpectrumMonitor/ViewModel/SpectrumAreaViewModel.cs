@@ -59,8 +59,9 @@ namespace SpectrumMonitor.ViewModel
             }
 
 
-            mTriggerMaskData.MaskDataList.Add(new MaskData(StartFrequency,TopLevel));
-            mTriggerMaskData.MaskDataList.Add(new MaskData(StopFrequency, TopLevel));
+            mTriggerMaskData.MaskDataList.Add(new MaskData(StartFrequency,TopLevel-30));
+            mTriggerMaskData.MaskDataList.Add(new MaskData(Center, TopLevel - 30));
+            mTriggerMaskData.MaskDataList.Add(new MaskData(StopFrequency, TopLevel-30));
         }
 
         public double[] LastSpectrumData { get; set; } = new double[0];
@@ -576,6 +577,12 @@ namespace SpectrumMonitor.ViewModel
         }
         public void DoShowTriggerMaskWindow()
         {
+            TriggerMaskData.SetRefWaveform(LastSpectrumData);
+            TriggerMaskData.TopLevel = TopLevel;
+            TriggerMaskData.BottomLevel = BottomLevel;
+            TriggerMaskData.XStart = StartFrequency;
+            TriggerMaskData.XStop = StopFrequency;
+
             MaskDataSetting triggerMaskWindow = new MaskDataSetting(TriggerMaskData);
             triggerMaskWindow.ShowDialog();
         }

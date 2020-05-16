@@ -6,6 +6,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -23,6 +24,7 @@ namespace SpectrumMonitor.ViewModel
         private readonly SpectrogramAreaViewModel mSpectrogramAreaViewModel;
         private readonly SpectrumAreaViewModel mSpectrumAreaViewModel;
         private readonly SignalTableAreaViewModel mSignalTableAreaViewModel;
+        private readonly DpxDisplayViewModel mDpxDisplayViewModel;
         private readonly ErrorMessageViewModel mErrorMessageViewModel;
         private readonly DeviceInfoViewModel mDeviceInfoViewModel;
 
@@ -38,6 +40,7 @@ namespace SpectrumMonitor.ViewModel
             mSettingPanelViewModel = new SettingPanelViewModel(this);
             mSpectrumAreaViewModel = new SpectrumAreaViewModel(this);
             mSpectrogramAreaViewModel = new SpectrogramAreaViewModel(this);
+            mDpxDisplayViewModel = new DpxDisplayViewModel(this);
             mSignalTableAreaViewModel = new ViewModel.SignalTableAreaViewModel(this);
             mErrorMessageViewModel = new ErrorMessageViewModel(this);
             mDeviceInfoViewModel = new DeviceInfoViewModel(this);
@@ -67,6 +70,8 @@ namespace SpectrumMonitor.ViewModel
         public SpectrumAreaControl SpectrumAreaControl { get; set; }
         public SpectrogramAreaControl SpectrogramAreaControl { get; set; }
         public SignalTableAreaControl SignalTableAreaControl { get; set; }
+
+        public DPXDisplayControl DPXDisplayControl { get; set; }
         #endregion
 
         #region ErrorMessage
@@ -84,6 +89,7 @@ namespace SpectrumMonitor.ViewModel
         }
 
         private int mLastErrorConut = 0;
+        private bool mDpxDisplayEnalbed = true;
 
         public void UpdateErrorMessage(bool firstTime = false)
         {
@@ -172,11 +178,41 @@ namespace SpectrumMonitor.ViewModel
         }
 
         internal DeviceInfoViewModel DeviceInfoViewModel => mDeviceInfoViewModel;
+
+        internal DpxDisplayViewModel DpxDisplayViewModel => mDpxDisplayViewModel;
+
         #endregion
 
         public Boolean? PowerState { get; set; } = true;
         public Boolean? ErrorState { get; set; } = false;
 
+
+        public bool DpxDisplayEnalbed
+        {
+            set
+            {
+                mDpxDisplayEnalbed = value;
+                NotifyPropertyChanged(()=> SpectrumDisplayVisibility);
+                NotifyPropertyChanged(() => DpxDisplayVisibility);
+            }
+            get => mDpxDisplayEnalbed;
+        }
+
+        public Visibility SpectrumDisplayVisibility
+        {
+            get
+            {
+                return DpxDisplayEnalbed ? Visibility.Hidden : Visibility.Visible;
+            }
+        }
+
+        public Visibility DpxDisplayVisibility
+        {
+            get
+            {
+                return DpxDisplayEnalbed ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
 
     }
 

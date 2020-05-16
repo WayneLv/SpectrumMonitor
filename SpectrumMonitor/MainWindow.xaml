@@ -44,10 +44,13 @@
         <ContentControl x:Name="MenuArea" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6"/>
         <ContentControl x:Name="FunctionArea" Grid.Row="2" Grid.Column="1"/>
         <ContentControl x:Name="IndicatorArea" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="1"/>
-        <ContentControl x:Name="SpectrogramArea" Grid.Row="4" Grid.Column="1"/>
         <ContentControl x:Name="SignalTableArea" Grid.Row="4" Grid.RowSpan="3" Grid.Column="3" Grid.ColumnSpan="2"/>
+
+        <ContentControl x:Name="SpectrogramArea" Grid.Row="6" Grid.Column="1"/>
         <!--<ContentControl x:Name="SettingPanelArea" Grid.Row="4" Grid.RowSpan="3" Grid.Column="6"/>-->
-        <ContentControl x:Name="SpectrumArea" Grid.Row="6" Grid.Column="1"/>
+        <ContentControl x:Name="SpectrumArea" Grid.Row="4" Grid.Column="1" Visibility="{Binding SpectrumDisplayVisibility}"/>
+        <ContentControl x:Name="DpxDisplayArea" Grid.Row="4" Grid.Column="1" Visibility="{Binding DpxDisplayVisibility}"/>
+        
 
         <!--<control:DisplayWindowLable Content="{Binding Path= LatestMessage, Mode=OneWay}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="4" x:Name="ErrorMessage" HorizontalAlignment="Stretch"
                                     UserWindowType ="{x:Type windows:ErrorInfo}" />-->

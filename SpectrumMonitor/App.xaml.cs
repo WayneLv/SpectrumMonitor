@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
+using InstrumentDriver.Core.Utility;
 using SpectrumMonitor.Windows;
 
 namespace SpectrumMonitor

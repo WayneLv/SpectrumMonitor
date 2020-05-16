@@ -6,55 +6,22 @@
         xmlns:view="clr-namespace:SpectrumMonitor.ViewModel"
         xmlns:control="clr-namespace:SpectrumMonitor.Controls"
         xmlns:local="clr-namespace:SpectrumMonitor.Windows"
-        mc:Ignorable="d" Loaded="DisplayLoaded" WindowStartupLocation="CenterScreen"
-        Title="{Binding ListName}" Height="450" Width="800" Background="Gray">
+        mc:Ignorable="d" Loaded="DisplayLoaded" WindowStartupLocation="CenterScreen" SizeChanged="MaskDataSetting_OnSizeChanged"
+        Title="{Binding ListName}" MinHeight="410" MinWidth="810" Background="Gray">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
-            <RowDefinition Height="25" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
         </Grid.ColumnDefinitions>
 
-        <Rectangle Grid.Row="0" Grid.RowSpan="5" Grid.ColumnSpan="2" Stroke="DarkOrange"  StrokeThickness="2" Margin="3"/>
-
-        <!--<StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Orientation="Vertical" Margin="3,5,3,10">
-            <ListView ItemsSource="{Binding Path=MaskDataList}"
-                      IsSynchronizedWithCurrentItem="True"
-                      view:GridViewSort.AutoSort="True">
-
-                <ListView.View>
-                    <GridView AllowsColumnReorder="True">
-                        <GridViewColumn Header="{Binding XLable}" Width="120" view:GridViewSort.PropertyName="XLable">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <control:NumericBox Text="{Binding Path=XValue}" MinWidth="100"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-
-                        <GridViewColumn Header="{Binding YLable}"  Width="60" view:GridViewSort.PropertyName="YLable">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <control:NumericBox Text="{Binding Path=YValue}" MinWidth="40"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-
-                    </GridView>
-                </ListView.View>
-
-            </ListView>
-        </StackPanel>-->
-
-        <DataGrid Name="mMaskDataTable" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Path=MaskDataList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+        <DataGrid Name="mMaskDataTable" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Path=MaskDataList,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                   HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" SelectionUnit="Cell" SelectionMode="Single" CanUserAddRows="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=XValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Frequency" MinWidth="120"/>
@@ -62,13 +29,14 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Content="Add One Point" Command="{Binding Path=AddOnePoint}" ></Button>
-        <!--<Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Content="Remove Selected" Command="{Binding Path=RemoveSelected}" ></Button>-->
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Content="Remove Selected" Click="RemoveSelected_OnClick" ></Button>
-        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="2" Content="Remove All" Command="{Binding Path=RemoveAll}" ></Button>
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <Button Margin="2" Content="Add One Point" Command="{Binding Path=AddOnePoint}" ></Button>
+            <!--<Button Margin="2" Content="Remove Selected" Command="{Binding Path=RemoveSelected}" ></Button>-->
+            <Button Margin="2" Content="Remove Selected" Click="RemoveSelected_OnClick" ></Button>
+            <Button Margin="2" Content="Remove All" Command="{Binding Path=RemoveAll}" ></Button>
+        </StackPanel>
 
-
-        <Grid Name="WaveformViewPortContainer" Margin="4" Grid.Row="0" Grid.Column="2" Grid.RowSpan="6" Background="Black"
+        <Grid Name="WaveformViewPortContainer" Margin="4" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Background="Black"
               Cursor="" MouseDown="SpectrumMouseClick">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -81,8 +49,52 @@
             <Rectangle Stroke="LightGray" Grid.Row="0" Grid.Column="1" StrokeThickness="2" Margin="2"/>
             <Image Name="WaveformViewport" Grid.Row="0" Grid.Column="1" Margin="0" />
 
-        </Grid>
+            <Grid Name="LeftArea" Margin="1" Grid.Row="0" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="18" />
+                    <RowDefinition Height="15" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="18" />
+                    <RowDefinition Height="15" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" FontSize="10" Text="{Binding TopLevel,Converter={StaticResource DoubleToStringDisplay}}" HorizontalAlignment="Right" Foreground="White"></TextBlock>
+                <Label Grid.Row="1" Foreground="White" FontSize="10" HorizontalAlignment="Right">dBm</Label>
 
+                <TextBlock Grid.Row="3" FontSize="10" Text="{Binding BottomLevel,Converter={StaticResource DoubleToStringDisplay}}" HorizontalAlignment="Right" Foreground="White"></TextBlock>
+                <Label Grid.Row="4" Foreground="White" FontSize="10" HorizontalAlignment="Right">dBm</Label>
+
+            </Grid>
+
+            <Grid Name="BottomArea" Margin="1" Grid.Row="2" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="18" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Margin="0,0,5,0">Start Freq</Label>
+                <TextBlock Grid.Column="1" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Text="{Binding Path=XStart,Converter={StaticResource DoubleToFreqDisplay}}"/>
+
+                <Label Grid.Column="3" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Margin="0,0,5,0">Center Freq</Label>
+                <TextBlock Grid.Column="4" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Text="{Binding Path=Center,Converter={StaticResource DoubleToFreqDisplay}}"/>
+
+                <Label Grid.Column="6" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Margin="0,0,5,0">Stop Freq</Label>
+                <TextBlock Grid.Column="7" Foreground="White" FontSize="12" VerticalAlignment="Bottom" Text="{Binding Path=XStop,Converter={StaticResource DoubleToFreqDisplay}}"/>
+
+
+</Grid>
+
+        </Grid>
 
     </Grid>
 </Window>

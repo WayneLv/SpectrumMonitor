@@ -19,5 +19,7 @@ namespace InstrumentDriverCore.Interfaces
         bool ReadSpectrum(ref double[] data, int index = 0);
 
         bool ReadSignalCharacter(ref List<ISignalCharacters> signalcharacters);
+
+        bool ReadDpxData(out int[,] dpxData);
     }
 }
