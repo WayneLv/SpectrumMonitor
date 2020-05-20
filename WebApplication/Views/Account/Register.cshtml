@@ -1,0 +1,50 @@
+﻿@model FirstWebApplication.WebApplication.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Registration";
+}
+
+<div class="row">
+    @if (TempData["validationmessage"] != null)
+    {
+        string alertType = "alert alert-" + TempData["alertType"];
+        <div class="@alertType">
+            <strong>Alert!</strong> @TempData["validationmessage"]
+        </div>
+    }
+</div>
+<h2 class="text-center">Register</h2>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="jumbotron">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form role="form" asp-action="Registar" asp-controller="Account" method="post">
+                @Html.ValidationSummary(true)
+                <div class="form-group">
+                    <label for="Name">User Name</label>
+                    <input type="text" name="Name" asp-for="Name" class="form-control input-sm" autocomplete="off" data-val="true" data-val-required="The name field is required." placeholder="Name">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                    @Html.ValidationMessageFor(m => m.Name)
+                </div>
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input type="password" name="Password" asp-for="Password" autocomplete="off" class="form-control input-sm" data-val="true" data-val-required="The password field is required." placeholder="Password">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                    @Html.ValidationMessageFor(m => m.Password)
+                </div>
+                <div class="form-group">
+                    <label for="ConfirmPassword">Password</label>
+                    <input type="password" name="ConfirmPassword" asp-for="ConfirmPassword" autocomplete="off" class="form-control input-sm" placeholder="ConfirmPassword">
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    @Html.ValidationMessageFor(m => m.ConfirmPassword)
+                </div>
+
+                <input type="submit" value="Register" class="btn btn-info btn-block">
+                <input name="__RequestVerificationToken" type="hidden" value="<removed for brevity>">
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+

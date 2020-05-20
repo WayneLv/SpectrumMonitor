@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1082
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpectrumMonitor", "SpectrumMonitor\SpectrumMonitor.csproj", "{C1825841-8C78-40EC-AC75-79F5879AC874}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentDriverCore", "InstrumentDriverCore\InstrumentDriverCore.csproj", "{DF43BC63-C71B-47C2-9C62-8B48E6358909}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstrumentDriver", "InstrumentDriver\InstrumentDriver.csproj", "{992B19ED-47A5-42CE-BA38-514F82D70460}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstWebApplication", "WebApplication\FirstWebApplication.csproj", "{ECCCD176-49F7-4DA9-B69B-15E3328E2289}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,8 +58,19 @@ Global
 		{992B19ED-47A5-42CE-BA38-514F82D70460}.Release|Any CPU.Build.0 = Release|Any CPU
 		{992B19ED-47A5-42CE-BA38-514F82D70460}.Release|x64.ActiveCfg = Release|Any CPU
 		{992B19ED-47A5-42CE-BA38-514F82D70460}.Release|x64.Build.0 = Release|Any CPU
+		{ECCCD176-49F7-4DA9-B69B-15E3328E2289}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECCCD176-49F7-4DA9-B69B-15E3328E2289}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECCCD176-49F7-4DA9-B69B-15E3328E2289}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ECCCD176-49F7-4DA9-B69B-15E3328E2289}.Debug|x64.Build.0 = Debug|Any CPU
+		{ECCCD176-49F7-4DA9-B69B-15E3328E2289}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECCCD176-49F7-4DA9-B69B-15E3328E2289}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECCCD176-49F7-4DA9-B69B-15E3328E2289}.Release|x64.ActiveCfg = Release|Any CPU
+		{ECCCD176-49F7-4DA9-B69B-15E3328E2289}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5D6AB538-A819-4F9A-AA09-A0FB7E5BCA6D}
 	EndGlobalSection
 EndGlobal
