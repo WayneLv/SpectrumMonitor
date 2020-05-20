@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:control="clr-namespace:SpectrumMonitor.Controls"
              xmlns:view="clr-namespace:SpectrumMonitor.ViewModel"
-             mc:Ignorable="d" Loaded="DisplayLoaded"
+             mc:Ignorable="d" Loaded="DisplayLoaded" SizeChanged="SpectrogramAreaControl_OnSizeChanged"
              d:DesignHeight="300" d:DesignWidth="300" Background="Black">
     <UserControl.Resources>
         <view:SpectrogramMarkerStateToCusor x:Key="SpectrogramMarkerStateToCusor"></view:SpectrogramMarkerStateToCusor>
@@ -102,6 +102,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
 
             </Grid.ColumnDefinitions>
 
@@ -115,6 +116,13 @@
                       FontSize="10" SelectedIndex="{Binding Path=CurrentMarker,Mode=TwoWay}"></ComboBox>
             <ComboBox Grid.Row="0" Grid.Column="6" ItemsSource="{Binding Path=MarkerStateItems}"
                       FontSize="10" SelectedIndex="{Binding Path=CurrentMarkerState,Mode=TwoWay,Converter={StaticResource MarkerStateEnumToIndex}}"></ComboBox>
+
+            <Button Grid.Row="0" Grid.Column="7" Margin="0,0,0,0" Command="{Binding Path=DisplaySizeChange}" Background="Transparent" BorderBrush="Transparent">
+                <StackPanel>
+                    <Image Width="18" Height="18" Source="{Binding IsMaxDisplayed,Converter={StaticResource DisplayedSizeToIcon}}" 
+                           ToolTip="{Binding IsMaxDisplayed,Converter={StaticResource DisplayedSizeToTips}}"  ></Image>
+                </StackPanel>
+            </Button>
 
         </Grid>
 

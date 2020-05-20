@@ -27,8 +27,12 @@ namespace SpectrumMonitor.ViewModel
 
         public bool DPXDisplay
         {
-            get { return mMainViewModel.DpxDisplayEnalbed; }
-            set { mMainViewModel.DpxDisplayEnalbed = value; }
+            get { return mMainViewModel.DpxDisplayEnabled; }
+            set
+            {
+                mMainViewModel.DpxDisplayEnabled = value;
+                NotifyPropertyChanged(()=> DPXDisplay);
+            }
         }
 
         private bool mIsBlink = true;
@@ -161,7 +165,7 @@ namespace SpectrumMonitor.ViewModel
             {
                 ((SpectrumMonitorInstrument)mInstr).ReadSpectrum(ref spectrum);
 
-                spectrum = Utility.WaveformInterpolation(spectrum, (int)mMainViewModel.SpectrogramAreaControl.SpectrogramMarkerContainer.ActualWidth);
+                //spectrum = Utility.WaveformInterpolation(spectrum, (int)mMainViewModel.SpectrogramAreaControl.SpectrogramMarkerContainer.ActualWidth);
                 mMainViewModel.SpectrumAreaViewModel.UpdateData(spectrum);
                 mMainViewModel.SpectrogramAreaViewModel.UpdateData(spectrum);
 
@@ -183,7 +187,7 @@ namespace SpectrumMonitor.ViewModel
 
             CancellationToken ct = mCts.Token;
 
-            if (!mMainViewModel.DpxDisplayEnalbed)
+            if (!mMainViewModel.DpxDisplayEnabled)
             {
                 mUpdateSpectrumDisplayTask = Task.Factory.StartNew(
                     () =>
@@ -233,7 +237,7 @@ namespace SpectrumMonitor.ViewModel
             int[,] dpxdata;
             while (mIsMornitoring)
             {
-                if (mMainViewModel.DpxDisplayEnalbed)
+                if (mMainViewModel.DpxDisplayEnabled)
                 {
                     ((SpectrumMonitorInstrument) mInstr).ReadDpxData(out dpxdata);
 

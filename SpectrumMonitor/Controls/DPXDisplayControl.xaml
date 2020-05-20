@@ -13,7 +13,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="*" />
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
@@ -107,8 +107,16 @@
 
             </Grid.ColumnDefinitions>
 
+            <Label Grid.Row="0" Grid.Column="3" FontSize="12" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center">DPX Display</Label>
 
-            <Button Grid.Row="0" Grid.Column="4" Margin="0,0,0,0" Command="{Binding Path=MarkerPeakSearch}" Background="Transparent" BorderBrush="Transparent" Visibility="{Binding Path=CurrentMarkerVisibility}">
+            <Button Grid.Row="0" Grid.Column="4" Margin="0,0,0,0" Command="{Binding Path=DisplaySizeChange}" Background="Transparent" BorderBrush="Transparent">
+                <StackPanel>
+                    <Image Width="18" Height="18" Source="{Binding IsMaxDisplayed,Converter={StaticResource DisplayedSizeToIcon}}" 
+                           ToolTip="{Binding IsMaxDisplayed,Converter={StaticResource DisplayedSizeToTips}}"  ></Image>
+                </StackPanel>
+            </Button>
+
+            <!--<Button Grid.Row="0" Grid.Column="4" Margin="0,0,0,0" Command="{Binding Path=MarkerPeakSearch}" Background="Transparent" BorderBrush="Transparent" Visibility="{Binding Path=CurrentMarkerVisibility}">
                 <StackPanel>
                     <Image Source="../Images/PeakSearch.png" ToolTip="Peak Search" Width="22" Height="22"></Image>
                 </StackPanel>
@@ -116,7 +124,7 @@
             <ComboBox Grid.Row="0" Grid.Column="5" ItemsSource="{Binding Path=MarkerItems}"
                       FontSize="10" SelectedIndex="{Binding Path=CurrentMarker,Mode=TwoWay}"></ComboBox>
             <ComboBox Grid.Row="0" Grid.Column="6" ItemsSource="{Binding Path=MarkerStateItems}"
-                      FontSize="10" SelectedIndex="{Binding Path=CurrentMarkerState,Mode=TwoWay,Converter={StaticResource MarkerStateEnumToIndex}}"></ComboBox>
+                      FontSize="10" SelectedIndex="{Binding Path=CurrentMarkerState,Mode=TwoWay,Converter={StaticResource MarkerStateEnumToIndex}}"></ComboBox>-->
 
         </Grid>
 

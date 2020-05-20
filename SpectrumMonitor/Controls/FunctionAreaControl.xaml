@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SpectrumMonitor.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -79,9 +79,9 @@
                     </StackPanel>
                 </Button>
 
-                <CheckBox Margin="30,5,5,0" IsChecked="{Binding DPXDisplay}">
-                    DPX Display
-                </CheckBox>
+
+                <ToggleButton Margin="30,0,5,0" Background="Lavender" MinWidth="70"
+                              IsChecked="{Binding DPXDisplay}" Content="{Binding DPXDisplay, Converter={StaticResource DpxDisplayedToString}}"/>
 
             </DockPanel>
         </Grid>

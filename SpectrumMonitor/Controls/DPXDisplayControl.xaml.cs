@@ -156,5 +156,10 @@ namespace SpectrumMonitor.Controls
         {
 
         }
+
+        private void DisplaySizeChanged(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

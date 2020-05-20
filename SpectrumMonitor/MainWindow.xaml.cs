@@ -32,6 +32,7 @@ namespace SpectrumMonitor
 
             // Set view model for main window
             mSpctrumMonitorViewModel = new SpctrumMonitorViewModel();
+            mSpctrumMonitorViewModel.MainWindowInstance = this;
             DataContext = mSpctrumMonitorViewModel;
             SpctrumMonitorViewModel.ViewDispatcher = this;
 
@@ -59,5 +60,66 @@ namespace SpectrumMonitor
             errWindow.ShowDialog();
             mSpctrumMonitorViewModel.UpdateErrorMessage();
         }
+
+        public void DisplaySizeChange(bool restore, string controlName = "")
+        {
+            if (restore)
+            {
+                SignalTableArea.Visibility = Visibility.Visible;
+
+                Grid.SetRow(SpectrogramArea, 6);
+                Grid.SetColumnSpan(SpectrogramArea, 1);
+                Grid.SetRowSpan(SpectrogramArea, 1);
+                SpectrogramArea.Visibility = Visibility.Visible;
+
+
+                Grid.SetColumnSpan(SpectrumArea,1);
+                Grid.SetRowSpan(SpectrumArea, 1);
+                SpectrumArea.Visibility = mSpctrumMonitorViewModel.DpxDisplayEnabled? Visibility.Hidden: Visibility.Visible;
+
+                Grid.SetColumnSpan(DpxDisplayArea, 1);
+                Grid.SetRowSpan(DpxDisplayArea, 1);
+                DpxDisplayArea.Visibility = mSpctrumMonitorViewModel.DpxDisplayEnabled ? Visibility.Visible : Visibility.Hidden;
+            }
+            else
+            {
+                int maxDisplayRows = 3;
+                int maxDisplayCols = 4;
+
+                SignalTableArea.Visibility = Visibility.Hidden;
+
+                if (controlName == "SpectrogramArea")
+                {
+                    SpectrumArea.Visibility = Visibility.Hidden;
+                    DpxDisplayArea.Visibility = Visibility.Hidden;
+                    SpectrogramArea.Visibility = Visibility.Visible;
+
+                    Grid.SetRow(SpectrogramArea, 4);
+                    Grid.SetColumnSpan(SpectrogramArea, maxDisplayCols);
+                    Grid.SetRowSpan(SpectrogramArea, maxDisplayRows);
+
+                }
+                else if (controlName == "SpectrumArea")
+                {
+                    SpectrogramArea.Visibility = Visibility.Hidden;
+                    DpxDisplayArea.Visibility = Visibility.Hidden;
+                    SpectrumArea.Visibility = Visibility.Visible;
+
+                    Grid.SetColumnSpan(SpectrumArea, maxDisplayCols);
+                    Grid.SetRowSpan(SpectrumArea, maxDisplayRows);
+                }
+                else if (controlName == "DpxDisplayArea")
+                {
+                    SpectrogramArea.Visibility = Visibility.Hidden;
+                    SpectrumArea.Visibility = Visibility.Hidden;
+                    SpectrumArea.Visibility = Visibility.Visible;
+
+                    Grid.SetColumnSpan(DpxDisplayArea, maxDisplayCols);
+                    Grid.SetRowSpan(DpxDisplayArea, maxDisplayRows);
+                }
+            }
+
+        }
+
     }
 }

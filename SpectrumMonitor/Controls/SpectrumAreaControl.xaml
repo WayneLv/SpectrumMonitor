@@ -7,7 +7,7 @@
              xmlns:view="clr-namespace:SpectrumMonitor.ViewModel"
              xmlns:windows="clr-namespace:SpectrumMonitor.Windows"
 
-             mc:Ignorable="d" Loaded="DisplayLoaded"
+             mc:Ignorable="d" Loaded="DisplayLoaded" SizeChanged="SpectrumAreaControl_OnSizeChanged"
              d:DesignHeight="300" d:DesignWidth="300" Background="Black">
     <UserControl.Resources>
         <view:AverageStateToDisplay x:Key="AverageStateToDisplay"></view:AverageStateToDisplay>
@@ -96,6 +96,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
 
             </Grid.ColumnDefinitions>
             <TextBlock Text="Trace Mode:" Grid.Row="0" Grid.Column="0" Foreground="White" FontSize="10" VerticalAlignment="Center"/>
@@ -126,6 +127,13 @@
                       FontSize="10" SelectedIndex="{Binding Path=CurrentMarker,Mode=TwoWay}"></ComboBox>
             <ComboBox Grid.Row="0" Grid.Column="11" ItemsSource="{Binding Path=MarkerStateItems}"
                       FontSize="10" SelectedIndex="{Binding Path=CurrentMarkerState,Mode=TwoWay,Converter={StaticResource MarkerStateEnumToIndex}}"></ComboBox>
+
+            <Button Grid.Row="0" Grid.Column="12" Margin="0,0,0,0" Command="{Binding Path=DisplaySizeChange}" Background="Transparent" BorderBrush="Transparent">
+                <StackPanel>
+                    <Image Width="18" Height="18" Source="{Binding IsMaxDisplayed,Converter={StaticResource DisplayedSizeToIcon}}" 
+                           ToolTip="{Binding IsMaxDisplayed,Converter={StaticResource DisplayedSizeToTips}}"  ></Image>
+                </StackPanel>
+            </Button>
 
         </Grid>
 

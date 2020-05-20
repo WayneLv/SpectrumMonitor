@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using InstrumentDriver.SpectrumMonitor;
+using SpectrumMonitor.Windows;
 
 namespace SpectrumMonitor.ViewModel
 {
@@ -13,6 +15,7 @@ namespace SpectrumMonitor.ViewModel
         SpctrumMonitorViewModel mMainViewModel;
         private int mTopColorTimes = 20;
         private int mBottomColorTimes =1;
+        private bool mIsMaxDisplayed = false;
 
         public DpxDisplayViewModel(SpctrumMonitorViewModel mainviewmodel)
         {
@@ -76,9 +79,27 @@ namespace SpectrumMonitor.ViewModel
             DpxData = dpxdata;
         }
 
-        public void UpdateDisplay()
+        public bool IsMaxDisplayed
         {
-            
+            get => mIsMaxDisplayed;
+            set
+            {
+                mIsMaxDisplayed = value;
+                NotifyPropertyChanged(()=> IsMaxDisplayed);
+            }
+        }
+
+        private RelayCommand mDisplaySizeChange;
+        public ICommand DisplaySizeChange
+        {
+            get { return mDisplaySizeChange ?? (mDisplaySizeChange = new RelayCommand(() => DoDisplaySizeChange())); }
+        }
+        public void DoDisplaySizeChange()
+        {
+            IsMaxDisplayed = !IsMaxDisplayed;
+
+            var mainWindow = MainWindow.GetWindow(mMainViewModel.DPXDisplayControl) as SpectrumMonitor.MainWindow;
+            mainWindow.DisplaySizeChange(!IsMaxDisplayed, "DpxDisplayArea");
         }
 
     }

@@ -89,7 +89,6 @@ namespace SpectrumMonitor.ViewModel
         }
 
         private int mLastErrorConut = 0;
-        private bool mDpxDisplayEnalbed = true;
 
         public void UpdateErrorMessage(bool firstTime = false)
         {
@@ -186,23 +185,24 @@ namespace SpectrumMonitor.ViewModel
         public Boolean? PowerState { get; set; } = true;
         public Boolean? ErrorState { get; set; } = false;
 
-
-        public bool DpxDisplayEnalbed
+        private bool mDpxDisplayEnabled = false;
+        public bool DpxDisplayEnabled
         {
             set
             {
-                mDpxDisplayEnalbed = value;
+                mDpxDisplayEnabled = value;
+                NotifyPropertyChanged(() => DpxDisplayEnabled);
                 NotifyPropertyChanged(()=> SpectrumDisplayVisibility);
                 NotifyPropertyChanged(() => DpxDisplayVisibility);
             }
-            get => mDpxDisplayEnalbed;
+            get => mDpxDisplayEnabled;
         }
 
         public Visibility SpectrumDisplayVisibility
         {
             get
             {
-                return DpxDisplayEnalbed ? Visibility.Hidden : Visibility.Visible;
+                return DpxDisplayEnabled ? Visibility.Hidden : Visibility.Visible;
             }
         }
 
@@ -210,7 +210,7 @@ namespace SpectrumMonitor.ViewModel
         {
             get
             {
-                return DpxDisplayEnalbed ? Visibility.Visible : Visibility.Hidden;
+                return DpxDisplayEnabled ? Visibility.Visible : Visibility.Hidden;
             }
         }
 
@@ -284,4 +284,74 @@ namespace SpectrumMonitor.ViewModel
         }
 
     }
+
+    public class DisplayedSizeToIcon : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            bool ismaxdisplayed = (value == null)? false:(bool)value;
+            if (ismaxdisplayed)
+            {
+                return "../Images/Down.png";
+            }
+            else
+            {
+                return "../Images/Up.png";
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+
+            throw new NotImplementedException();
+        }
+
+    }
+
+    public class DisplayedSizeToTips : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            bool ismaxdisplayed = (value == null) ? false : (bool)value;
+            if (ismaxdisplayed)
+            {
+                return "Restore display";
+            }
+            else
+            {
+                return "Maximum Display";
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+
+            throw new NotImplementedException();
+        }
+
+    }
+
+    public class DpxDisplayedToString : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            bool isdpxdisplayed = (value == null) ? false : (bool)value;
+            if (isdpxdisplayed)
+            {
+                return "DPX";
+            }
+            else
+            {
+                return "Spectrum";
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+
+            throw new NotImplementedException();
+        }
+
+    }
+
 }

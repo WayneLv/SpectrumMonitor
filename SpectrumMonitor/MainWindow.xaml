@@ -7,7 +7,7 @@
         xmlns:control="clr-namespace:SpectrumMonitor.Controls;assembly="
         xmlns:windows="clr-namespace:SpectrumMonitor.Windows"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" Closed="MainWindow_OnClosed"
+        WindowStartupLocation="CenterScreen" Closed="MainWindow_OnClosed" 
         Title="Spectrum Monitor" MinHeight="740" MinWidth="1280" Background="DarkGray">
     <Grid>
         <!--<control:WindowButton Content="ShowDeviceInfo" UserWindowType ="{x:Type windows:DeviceInfo}" />
@@ -20,7 +20,7 @@
         <ContentControl x:Name="NewPanel" />-->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3"/>
-            <ColumnDefinition Width="800"/>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="100"/>
@@ -33,12 +33,12 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="6"/>
-            <RowDefinition Height="300"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="6"/>
-            <RowDefinition Height="300"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="4"/>
             <RowDefinition Height="20"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" FontSize="30" Foreground="Black" HorizontalAlignment="Center"></TextBlock>
         <ContentControl x:Name="MenuArea" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6"/>

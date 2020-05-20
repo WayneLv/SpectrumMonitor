@@ -59,6 +59,14 @@ namespace SpectrumMonitor.Controls
         {
             if (mWriteableBmpForSpectrumChart != null)
             {
+                if ((int)mWriteableBmpForSpectrumChart.Width != (int)SpectrumViewPortContainer.ActualWidth 
+                    || (int)mWriteableBmpForSpectrumChart.Height != (int)SpectrumViewPortContainer.ActualHeight)
+                {
+                    mWriteableBmpForSpectrumChart = BitmapFactory.New((int) SpectrumViewPortContainer.ActualWidth,
+                        (int) SpectrumViewPortContainer.ActualHeight);
+                    SpectrumImageViewport.Source = mWriteableBmpForSpectrumChart;
+                }
+
                 using (mWriteableBmpForSpectrumChart.GetBitmapContext())
                 {
                     mWriteableBmpForSpectrumChart.Clear();
@@ -136,6 +144,18 @@ namespace SpectrumMonitor.Controls
             }
         }
 
+        public void UpdateMarkersPosRange()
+        {
+            for (int i = 0; i < SpectrumAreaViewModel.MARKER_NUM; i++)
+            {
+                //Update Marker Range
+                mViewModel.Markers[i].UpdateXPosRange(0, (int)SpectrumViewPortContainer.ActualWidth);
+                mViewModel.Markers[i].UpdateYPosRange(0, (int)SpectrumViewPortContainer.ActualHeight);
+                mViewModel.Markers[i].UpdateXPos();
+                mViewModel.Markers[i].UpdateYPos();
+            }
+        }
+
         private void MarkerFrequency_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             NumericBox numericBox = sender as NumericBox;
@@ -157,5 +177,10 @@ namespace SpectrumMonitor.Controls
             }
         }
 
+        private void SpectrumAreaControl_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateOnNewData();
+            UpdateMarkersPosRange();
+        }
     }
 }

@@ -245,6 +245,30 @@ namespace SpectrumMonitor.ViewModel
             SetCurrentMarkerZPos(maxZIndex);
         }
 
+        private bool mIsMaxDisplayed = false;
+        public bool IsMaxDisplayed
+        {
+            get => mIsMaxDisplayed;
+            set
+            {
+                mIsMaxDisplayed = value;
+                NotifyPropertyChanged(() => IsMaxDisplayed);
+            }
+        }
+
+        private RelayCommand mDisplaySizeChange;
+        public ICommand DisplaySizeChange
+        {
+            get { return mDisplaySizeChange ?? (mDisplaySizeChange = new RelayCommand(() => DoDisplaySizeChange())); }
+        }
+        public void DoDisplaySizeChange()
+        {
+            IsMaxDisplayed = !IsMaxDisplayed;
+
+            var mainWindow = MainWindow.GetWindow(mMainViewModel.SpectrogramAreaControl) as SpectrumMonitor.MainWindow;
+            mainWindow.DisplaySizeChange(!IsMaxDisplayed, "SpectrogramArea");
+        }
+
     }
 
     public class SpectrogramMarkerStateToCusor : IValueConverter

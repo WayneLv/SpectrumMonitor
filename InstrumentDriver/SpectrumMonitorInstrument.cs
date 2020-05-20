@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using InstrumentDriver.Core;
 using InstrumentDriver.Core.Utility;
 using InstrumentDriver.Core.Mock;
@@ -356,10 +357,8 @@ namespace InstrumentDriver.SpectrumMonitor
         {
             //if (IsSimulated)
             {
-                data = Utility.SimulateSpectrumData(10000);
+                data = Utility.SimulateSpectrumData(1024);
 
-                List<ISignalCharacters> sig = new List<ISignalCharacters>();
-                ReadSignalCharacter(ref sig);
                 return true;
             }
             //else //TODO Read Spectrum from Hardware
@@ -382,16 +381,34 @@ namespace InstrumentDriver.SpectrumMonitor
             }
         }
 
-
+        private int mLastFileIndex = -1;
         public bool ReadDpxData(out int[,] dpxData)
         {
             //if (IsSimulated)
             {
-                string[] simFileNames = new[] {"dec.xlsx", "avg.xlsx", "max.xlsx", "min.xlsx"};
+                string folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string path = Path.Combine(folder, "DPXSimData");
+                if (Directory.Exists(path))
+                {
 
-                Random rd = new Random();
-                int index = rd.Next(simFileNames.Length);
-                dpxData = Utility.GetDPXDataFromExcelFile(@"C:\My Data\Data\Sensor\data\DPX4096_200\" + simFileNames[index],startLevel:30,stopLevel:80);
+                    var simFileNames = Directory.GetFiles(path,"*.xlsx");
+
+                    Random rd = new Random();
+                    int index = rd.Next(simFileNames.Length);
+                    while (index == mLastFileIndex)
+                    {
+                        index = rd.Next(simFileNames.Length);
+                    }
+                    mLastFileIndex = index;
+
+                    dpxData = Utility.GetDPXDataFromExcelFile(simFileNames[index], startLevel: 30,
+                        stopLevel: 80);
+                }
+                else
+                {
+                    dpxData = new int[0,0];
+                }
+
                 return true;
             }
             //else //TODO Read SignaCharacter from Hardware

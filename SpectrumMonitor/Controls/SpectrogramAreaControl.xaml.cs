@@ -139,17 +139,25 @@ namespace SpectrumMonitor.Controls
                 int dWidth = (int)this.SpectrogramViewPortContainer.ActualWidth;
                 int dHeight = (int)this.SpectrogramViewPortContainer.ActualHeight;
 
-                if (mWriteableBmp == null)
+                if (mWriteableBmp == null || (int)mWriteableBmp.Width != dWidth || (int)mWriteableBmp.Height != dHeight)
                 {
                     mWriteableBmp = new WriteableBitmap(dWidth, dHeight, 96, 96, PixelFormats.Pbgra32, null);
                 }
 
                 mWriteableBmp.Lock();
 
-                mWriteableBmp.WritePixels(new Int32Rect(0, 1, dWidth, dHeight - 1),
-                    mWriteableBmp.BackBuffer,
-                    mWriteableBmp.BackBufferStride * (mWriteableBmp.PixelHeight - 1),
-                    mWriteableBmp.BackBufferStride);
+                try
+                {
+                    mWriteableBmp.WritePixels(new Int32Rect(0, 1, dWidth, dHeight - 1),
+                        mWriteableBmp.BackBuffer,
+                        mWriteableBmp.BackBufferStride * (mWriteableBmp.PixelHeight - 1),
+                        mWriteableBmp.BackBufferStride);
+                }
+                catch (Exception e)
+                {
+                    mWriteableBmp.Clear();
+                }
+
 
                 double xscale =(double)dWidth / (double)data.Length;
 
@@ -294,6 +302,17 @@ namespace SpectrumMonitor.Controls
             }
         }
 
+        public void UpdateMarkersPosRange()
+        {
+            for (int i = 0; i < SpectrogramAreaViewModel.MARKER_NUM; i++)
+            {
+                //Update Marker Range
+                mViewModel.Markers[i].UpdateXPosRange(0, (int)SpectrogramViewPortContainer.ActualWidth);
+                mViewModel.Markers[i].UpdateZPosRange(0, (int)SpectrogramViewPortContainer.ActualHeight);
+                mViewModel.Markers[i].UpdateXPos();
+            }
+        }
+
         private void SpectrogramMouseClick(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
@@ -308,6 +327,11 @@ namespace SpectrumMonitor.Controls
                 mViewModel.SetCurrentMarkerXIndex(xIndexScale);
 
             }
+        }
+
+        private void SpectrogramAreaControl_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateMarkersPosRange();
         }
     }   
 }

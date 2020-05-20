@@ -17,6 +17,10 @@
             <view:TraceModeEnumToIndex x:Key="TraceModeEnumToIndex"></view:TraceModeEnumToIndex>
             <view:DetectorTypeEnumToIndex x:Key="DetectorTypeEnumToIndex"></view:DetectorTypeEnumToIndex>
 
+            <view:DisplayedSizeToIcon x:Key="DisplayedSizeToIcon"></view:DisplayedSizeToIcon>
+            <view:DisplayedSizeToTips x:Key="DisplayedSizeToTips"></view:DisplayedSizeToTips>
+            <view:DpxDisplayedToString x:Key="DpxDisplayedToString"></view:DpxDisplayedToString>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
