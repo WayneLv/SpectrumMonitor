@@ -86,8 +86,8 @@ namespace InstrumentDriver.SpectrumMonitor
 
             // create the registers for this module.
             RegManager = new SpectrumMonitorRegManager(this);
-
-
+              
+            //Test
         }
 
         #region Private methods
